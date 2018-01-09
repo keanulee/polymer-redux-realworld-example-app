@@ -30,5 +30,15 @@ export const updateLocation = (location) => (dispatch, getState) => {
         dispatch(module.fetchArticle(module.currentArticleSelector(getState())));
       });
       break;
+    case 'login':
+      import(/* webpackChunkName: 'login' */ '../components/login-view.js').then(module => {
+        
+      });
+      break;
+    case 'register':
+      import(/* webpackChunkName: 'register' */ '../components/register-view.js').then(module => {
+        
+      });
+      break;
   }
 };

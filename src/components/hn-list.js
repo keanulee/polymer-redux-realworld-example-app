@@ -60,7 +60,7 @@ export class HnListElement extends connect(store)(PolymerElement) {
                       <a href$="[[_getArticleAuthorHref(item.author.username)]]" class="author">
                         [[item.author.username]]
                       </a>
-                      <span class="date">[[_formatDate(article.createdAt)]]</span>
+                      <span class="date">[[_formatDate(item.createdAt)]]</span>
                     </div>
                     <button class="btn btn-outline-primary btn-sm pull-xs-right">
                       <i class="ion-heart"></i> 29

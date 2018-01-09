@@ -44,6 +44,8 @@ export const pageSelector = createSelector(
       // case 'user':
       // case 'item':
       case 'article':
+      case 'login':
+      case 'register':
         return splitPath[0];
       default:
         return 'invalid-page';

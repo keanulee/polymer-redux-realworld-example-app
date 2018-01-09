@@ -20,36 +20,51 @@ export class HnAppElement extends connect(store)(PolymerElement) {
     return `
     ${sharedStyles}
     <style>
-      header {
-        margin: 1em 0;
-      }
-      header a {
-        padding: 4px;
-        border: 2px solid;
-        border-bottom: none;
-      }
       [page] > * {
         display: none;
       }
       [page=list] hn-list,
       [page=article] hn-item,
       [page=user] hn-user,
+      [page=login] login-view,
+      [page=register] register-view,
       [page=invalid-page] hn-invalid-page {
         display: block;
       }
     </style>
-    <header>
-      <a href="/">top</a>
-      <a href="/new">new</a>
-      <a href="/ask">ask</a>
-      <a href="/show">show</a>
-      <a href="/jobs">jobs</a>
-      <a href="/favorites">favorites</a>
-    </header>
+    <nav class="navbar navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="/">conduit</a>
+        <ul class="nav navbar-nav pull-xs-right">
+          <li class="nav-item">
+            <!-- Add "active" class when you're on that page" -->
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="">
+              <i class="ion-compose"></i>&nbsp;New Post
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="">
+              <i class="ion-gear-a"></i>&nbsp;Settings
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Sign in</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Sign up</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
     <div page$="[[page]]">
       <hn-list></hn-list>
       <hn-item></hn-item>
       <hn-user></hn-user>
+      <login-view></login-view>
+      <register-view></register-view>
       <hn-invalid-page></hn-invalid-page>
     </div>`;
   }
