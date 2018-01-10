@@ -1,21 +1,21 @@
 import {
-  REQUEST_ARTICLES,
-  RECEIVE_ARTICLES,
-  FAIL_ARTICLES
+  // REQUEST_ARTICLES,
+  SET_ARTICLES,
+  // FAIL_ARTICLES
 } from '../actions/articles.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
-import { splitPathnameSelector } from './location.js';
-import { itemsSelector } from './items.js';
-import { favoritesSelector } from './favorites.js';
+// import { splitPathnameSelector } from './location.js';
+// import { itemsSelector } from './items.js';
+// import { favoritesSelector } from './favorites.js';
 
 const articles = (state = [], action) => {
   switch (action.type) {
-    case REQUEST_ARTICLES:
-      return state;
-    case RECEIVE_ARTICLES:
+    // case REQUEST_ARTICLES:
+    //   return state;
+    case SET_ARTICLES:
       return action.data.articles;
-    case FAIL_ARTICLES:
-      return state;
+    // case FAIL_ARTICLES:
+    //   return state;
     default:
       return state;
   }

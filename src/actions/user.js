@@ -1,49 +1,63 @@
-export const REQUEST_USER = 'REQUEST_USER';
+import { api } from '../api.js';
+
+// export const REQUEST_USER = 'REQUEST_USER';
 export const SET_USER = 'SET_USER';
-export const FAIL_USER = 'FAIL_USER';
+// export const FAIL_USER = 'FAIL_USER';
+
+export const fetchUser = (token) => (dispatch) => {
+  if (token) {
+    api('/user', token)
+    .then(res => res.json())
+    .then(data => {
+      // if (data.error) {
+      //   throw data.error;
+      // }
+      dispatch(setUser(data.user));
+    })
+    // .catch(() => dispatch(failUser(user.id)));
+  }
+};
 
 export const loginUser = (user) => (dispatch) => {
-  // dispatch(requestUser(user.id));
-  fetch(`https://conduit.productionready.io/api/users/login`, {
+  api('/users/login', null /* token */, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: {'content-type': 'application/json'},
     body: JSON.stringify({user})
   })
   .then(res => res.json())
   .then(data => {
-    if (data.error) {
-      throw data.error;
-    }
-    dispatch(setUser(data))
+    // if (data.error) {
+    //   throw data.error;
+    // }
+    dispatch(setUser(data.user));
+    localStorage.setItem('jwt', data.user.token);
   })
-  .catch(() => dispatch(failUser(user.id)));
+  // .catch(() => dispatch(failUser(user.id)));
 };
 
-export const fetchUserIfNeeded = (user) => (dispatch) => {
-  if (user && !user.created_time && !user.isFetching) {
-    dispatch(fetchUser(user));
-  }
-};
+// export const fetchUserIfNeeded = (user) => (dispatch) => {
+//   if (user && !user.created_time && !user.isFetching) {
+//     dispatch(fetchUser(user));
+//   }
+// };
 
-const requestUser = (userId) => {
-  return {
-    type: REQUEST_USER,
-    userId
-  };
-};
+// const requestUser = (userId) => {
+//   return {
+//     type: REQUEST_USER,
+//     userId
+//   };
+// };
 
-const setUser = (data) => {
+const setUser = (user) => {
   return {
     type: SET_USER,
-    data
+    data: user
   };
 };
 
-const failUser = (userId) => {
-  return {
-    type: FAIL_USER,
-    userId
-  };
-};
+// const failUser = (userId) => {
+//   return {
+//     type: FAIL_USER,
+//     userId
+//   };
+// };

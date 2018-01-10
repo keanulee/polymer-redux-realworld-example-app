@@ -1,21 +1,21 @@
 import {
-  REQUEST_PROFILE,
+  // REQUEST_PROFILE,
   RECEIVE_PROFILE,
-  FAIL_PROFILE
+  // FAIL_PROFILE
 } from '../actions/profile.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
 import { splitPathnameSelector } from './location.js';
-import { itemsSelector } from './items.js';
-import { favoritesSelector } from './favorites.js';
+// import { itemsSelector } from './items.js';
+// import { favoritesSelector } from './favorites.js';
 
 const profile = (state = {}, action) => {
   switch (action.type) {
-    case REQUEST_PROFILE:
-      return state;
+    // case REQUEST_PROFILE:
+    //   return state;
     case RECEIVE_PROFILE:
       return action.data.profile;
-    case FAIL_PROFILE:
-      return state;
+    // case FAIL_PROFILE:
+    //   return state;
     default:
       return state;
   }

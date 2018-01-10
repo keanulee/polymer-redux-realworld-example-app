@@ -1,10 +1,7 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import '../../node_modules/@polymer/polymer/lib/elements/dom-if.js';
-import users, { currentUserSelector } from '../reducers/users.js';
 import user from '../reducers/user.js';
-import profile, { profileSelector, currentProfileSelector } from '../reducers/profile.js';
 import { store } from '../store.js';
-import { fetchUser, fetchUserIfNeeded } from '../actions/users.js';
 import { fetchProfile } from '../actions/profile.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
@@ -48,28 +45,12 @@ export class LoginView extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
-      user: Object,
-
-      profile: Object
     }
   }
 
   update(state) {
-    const user = currentUserSelector(state);
-    if (user) {
-      document.title = user.id;
-      this.setProperties({
-        user
-      });
-    }
-
     this.setProperties({
-      profile: profileSelector(state)
     });
-  }
-  
-  _reload() {
-    store.dispatch(fetchUser(this.user));
   }
 
   _submitForm() {
@@ -78,5 +59,3 @@ export class LoginView extends connect(store)(PolymerElement) {
 }
 
 customElements.define('login-view', LoginView);
-
-export { currentUserSelector, fetchUserIfNeeded, currentProfileSelector, fetchProfile };

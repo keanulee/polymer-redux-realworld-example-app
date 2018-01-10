@@ -1,17 +1,22 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import './hn-invalid-page.js';
 import location, { pageSelector } from '../reducers/location.js';
+import user from '../reducers/user.js';
 import { store } from '../store.js';
 import { updateLocation } from '../actions/location.js';
+import { fetchUser } from '../actions/user.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { installRouter } from '../../lib/router.js';
 import { sharedStyles } from './shared-styles.js';
+import { tokenSelector } from '../reducers/user.js';
 
 store.addReducers({
   location,
+  user
 });
 
 installRouter(() => store.dispatch(updateLocation(window.location)));
+store.dispatch(fetchUser(tokenSelector(store.getState())));
 
 export class AppView extends connect(store)(PolymerElement) {
   static get template() {

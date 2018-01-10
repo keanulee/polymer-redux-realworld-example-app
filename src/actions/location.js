@@ -1,4 +1,5 @@
 import { pageSelector } from '../reducers/location.js';
+import { tokenSelector } from '../reducers/user.js';
 
 export const UPDATE_LOCATION = 'UPDATE_LOCATION';
 
@@ -13,7 +14,8 @@ export const updateLocation = (location) => (dispatch, getState) => {
   switch (pageSelector(getState())) {
     case 'home':
       import(/* webpackChunkName: 'home' */ '../components/home-view.js').then(module => {
-        dispatch(module.fetchArticles());
+        const state = getState();
+        dispatch(module.fetchArticles(tokenSelector(state)));
       });
       break;
     case 'login':
@@ -28,12 +30,14 @@ export const updateLocation = (location) => (dispatch, getState) => {
       break;
     case 'profile':
       import(/* webpackChunkName: 'profile' */ '../components/profile-view.js').then(module => {
-        dispatch(module.fetchProfile(module.currentProfileSelector(getState())));
+        const state = getState();
+        dispatch(module.fetchProfile(module.currentProfileSelector(state), tokenSelector(state)));
       });
       break;
     case 'article':
       import(/* webpackChunkName: 'article' */ '../components/article-view.js').then(module => {
-        dispatch(module.fetchArticle(module.currentArticleSelector(getState())));
+        const state = getState();
+        dispatch(module.fetchArticle(module.currentArticleSelector(state), tokenSelector(state)));
       });
       break;
   }
