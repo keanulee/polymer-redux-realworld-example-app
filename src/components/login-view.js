@@ -1,15 +1,8 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-import '../../node_modules/@polymer/polymer/lib/elements/dom-if.js';
-import user from '../reducers/user.js';
 import { store } from '../store.js';
-import { fetchProfile } from '../actions/profile.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { loginUser } from '../actions/user.js';
-
-store.addReducers({
-  user
-});
 
 export class LoginView extends connect(store)(PolymerElement) {
   static get template() {
@@ -25,7 +18,7 @@ export class LoginView extends connect(store)(PolymerElement) {
               <a href="/register">Need an account?</a>
             </p>
 
-            <form>
+            <form on-submit="_submitForm">
               <fieldset class="form-group">
                 <input class="form-control form-control-lg" type="text" placeholder="Email">
               </fieldset>
@@ -53,7 +46,8 @@ export class LoginView extends connect(store)(PolymerElement) {
     });
   }
 
-  _submitForm() {
+  _submitForm(e) {
+    e.preventDefault();
     store.dispatch(loginUser({email: "romanticclient@abc.com", password: "romanticclient"}));
   }
 }

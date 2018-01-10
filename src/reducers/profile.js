@@ -1,6 +1,6 @@
 import {
   // REQUEST_PROFILE,
-  RECEIVE_PROFILE,
+  SET_PROFILE,
   // FAIL_PROFILE
 } from '../actions/profile.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
@@ -12,8 +12,8 @@ const profile = (state = {}, action) => {
   switch (action.type) {
     // case REQUEST_PROFILE:
     //   return state;
-    case RECEIVE_PROFILE:
-      return action.data.profile;
+    case SET_PROFILE:
+      return action.data;
     // case FAIL_PROFILE:
     //   return state;
     default:
@@ -52,11 +52,11 @@ export default profile;
 
 export const profileSelector = state => state.profile;
 
-export const currentProfileSelector = createSelector(
+export const usernameSelector = createSelector(
   splitPathnameSelector,
   (splitPath) => {
     const p = splitPath[0];
-    return p && p[0] === '@' ? { username: p.slice(1) } : null;
+    return p && p[0] === '@' ? p.slice(1) : null;
   }
 );
 

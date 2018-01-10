@@ -36,12 +36,14 @@ export const pageSelector = createSelector(
     switch (splitPath[0]) {
       case '':
         return 'home';
-      case 'article':
       case 'login':
       case 'register':
+      case 'settings':
+      case 'editor':
+      case 'article':
         return splitPath[0];
       default:
-        return 'invalid-page';
+        return 'invalid';
     }
   }
 );

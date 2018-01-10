@@ -1,5 +1,5 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-import './hn-invalid-page.js';
+import './invalid-view.js';
 import location, { pageSelector } from '../reducers/location.js';
 import user from '../reducers/user.js';
 import { store } from '../store.js';
@@ -15,7 +15,7 @@ store.addReducers({
   user
 });
 
-installRouter(() => store.dispatch(updateLocation(window.location)));
+installRouter(() => store.dispatch(updateLocation()));
 store.dispatch(fetchUser(tokenSelector(store.getState())));
 
 export class AppView extends connect(store)(PolymerElement) {
@@ -30,8 +30,10 @@ export class AppView extends connect(store)(PolymerElement) {
       [page=login] login-view,
       [page=register] register-view,
       [page=profile] profile-view,
+      [page=settings] settings-view,
+      [page=editor] editor-view,
       [page=article] article-view,
-      [page=invalid-page] hn-invalid-page {
+      [page=invalid] invalid-view {
         display: block;
       }
     </style>
@@ -41,23 +43,23 @@ export class AppView extends connect(store)(PolymerElement) {
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <!-- Add "active" class when you're on that page" -->
-            <a class="nav-link active" href="/">Home</a>
+            <a class$="[[_getLinkClasses(page, 'home')]]" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="/editor">
               <i class="ion-compose"></i>&nbsp;New Post
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class$="[[_getLinkClasses(page, 'settings')]]" href="/settings">
               <i class="ion-gear-a"></i>&nbsp;Settings
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/login">Sign in</a>
+            <a class$="[[_getLinkClasses(page, 'login')]]" href="/login">Sign in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register">Sign up</a>
+            <a class$="[[_getLinkClasses(page, 'register')]]" href="/register">Sign up</a>
           </li>
         </ul>
       </div>
@@ -67,8 +69,10 @@ export class AppView extends connect(store)(PolymerElement) {
       <login-view></login-view>
       <register-view></register-view>
       <profile-view></profile-view>
+      <settings-view></settings-view>
+      <editor-view></editor-view>
       <article-view></article-view>
-      <hn-invalid-page></hn-invalid-page>
+      <invalid-view></invalid-view>
     </div>`;
   }
   
@@ -82,6 +86,10 @@ export class AppView extends connect(store)(PolymerElement) {
     this.setProperties({
       page: pageSelector(state)
     });
+  }
+
+  _getLinkClasses(page, target) {
+    return page === target ? 'nav-link active' : 'nav-link';
   }
 }
 

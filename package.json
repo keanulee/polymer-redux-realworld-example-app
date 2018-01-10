@@ -1,11 +1,9 @@
 {
-  "name": "polymer-redux-hn",
+  "name": "polymer-redux-realworld-example-app",
   "flat": true,
   "version": "1.0.0",
   "contributors": [],
   "scripts": {
-    "clean": "rm dist/*.js",
-    "build": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "@0xcda7a/redux-es6": "^3.7.2",

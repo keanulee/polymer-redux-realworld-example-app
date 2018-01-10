@@ -1,5 +1,5 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-import profile, { profileSelector, currentProfileSelector } from '../reducers/profile.js';
+import profile, { profileSelector, usernameSelector } from '../reducers/profile.js';
 import { store } from '../store.js';
 import { fetchProfile } from '../actions/profile.js';
 import { connect } from '../../lib/connect-mixin.js';
@@ -113,4 +113,4 @@ export class ProfileView extends connect(store)(PolymerElement) {
 
 customElements.define('profile-view', ProfileView);
 
-export { currentProfileSelector, fetchProfile };
+export { usernameSelector, fetchProfile };

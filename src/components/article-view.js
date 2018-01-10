@@ -1,12 +1,13 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 // import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
-import article, { articleSelector, currentArticleSelector } from '../reducers/article.js';
+import article, { articleSelector, slugSelector } from '../reducers/article.js';
 import { store } from '../store.js';
 // import './hn-summary.js';
 // import './hn-comment.js';
-import { fetchArticle } from '../actions/article.js';
+import { fetchArticle, deleteArticle } from '../actions/article.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
+import { tokenSelector } from '../reducers/user.js';
 
 store.addReducers({
   article
@@ -43,6 +44,18 @@ export class ArticleView extends connect(store)(PolymerElement) {
               <i class="ion-heart"></i>
               &nbsp;
               Favorite Post <span class="counter">(29)</span>
+            </button>
+            &nbsp;&nbsp;
+            <a href$="[[_getArticleEditorHref(article.slug)]]" class="btn btn-sm btn-outline-secondary">
+              <i class="ion-edit"></i>
+              &nbsp;
+              Edit Post
+            </a>
+            &nbsp;&nbsp;
+            <button class="btn btn-sm btn-outline-danger" on-click="_clickDeleteButton">
+              <i class="ion-trash-a"></i>
+              &nbsp;
+              Delete Post
             </button>
           </div>
 
@@ -154,8 +167,16 @@ export class ArticleView extends connect(store)(PolymerElement) {
     });
   }
 
+  _clickDeleteButton() {
+    store.dispatch(deleteArticle(this.article.slug, tokenSelector(store.getState())));
+  }
+
   _getArticleAuthorHref(username) {
     return `/@${username}`;
+  }
+
+  _getArticleEditorHref(slug) {
+    return `/editor/${slug}`;
   }
 
   _formatDate(date) {
@@ -165,4 +186,4 @@ export class ArticleView extends connect(store)(PolymerElement) {
 
 customElements.define('article-view', ArticleView);
 
-export { currentArticleSelector, fetchArticle };
+export { slugSelector, fetchArticle };

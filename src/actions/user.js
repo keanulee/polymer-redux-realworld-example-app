@@ -1,4 +1,5 @@
 import { api } from '../api.js';
+import { updateLocation } from './location.js';
 
 // export const REQUEST_USER = 'REQUEST_USER';
 export const SET_USER = 'SET_USER';
@@ -30,9 +31,15 @@ export const loginUser = (user) => (dispatch) => {
     //   throw data.error;
     // }
     dispatch(setUser(data.user));
+    window.history.pushState({}, '', '/');
+    dispatch(updateLocation())
     localStorage.setItem('jwt', data.user.token);
   })
   // .catch(() => dispatch(failUser(user.id)));
+};
+
+export const createUser = (user) => (dispatch) => {
+  // TODO
 };
 
 // export const fetchUserIfNeeded = (user) => (dispatch) => {

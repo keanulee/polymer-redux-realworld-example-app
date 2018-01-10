@@ -1,13 +1,15 @@
+import { api } from '../api.js';
+
 // export const REQUEST_PROFILE = 'REQUEST_PROFILE';
-export const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
+export const SET_PROFILE = 'SET_PROFILE';
 // export const FAIL_PROFILE = 'FAIL_PROFILE';
 
-export const fetchProfile = (profile) => (dispatch) => {
+export const fetchProfile = (username, token) => (dispatch) => {
   // dispatch(requestProfile(profile));
-  fetch(`https://conduit.productionready.io/api/profiles/${profile.username}`)
-    .then(res => res.json())
-    .then(data => dispatch(receiveProfile(profile, data)))
-    // .catch(() => dispatch(failProfile(profile)));
+  api(`/profiles/${username}`, token)
+  .then(res => res.json())
+  .then(data => dispatch(setProfile(data.profile)))
+  // .catch(() => dispatch(failProfile(profile)));
 };
 
 // export const fetchListIfNeeded = (list) => (dispatch) => {
@@ -23,10 +25,9 @@ export const fetchProfile = (profile) => (dispatch) => {
 //   };
 // };
 
-const receiveProfile = (listId, data) => {
+const setProfile = (data) => {
   return {
-    type: RECEIVE_PROFILE,
-    listId,
+    type: SET_PROFILE,
     data
   };
 };
