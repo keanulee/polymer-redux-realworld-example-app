@@ -4,7 +4,7 @@ import { createSelector } from '../../node_modules/reselect/src/index.js';
 const location = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_LOCATION:
-      const location = action.location;
+      const location = action.payload;
       return {
         ...state,
         pathname: location.pathname,

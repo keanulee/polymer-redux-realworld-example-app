@@ -13,7 +13,7 @@ const profile = (state = {}, action) => {
     // case REQUEST_PROFILE:
     //   return state;
     case SET_PROFILE:
-      return action.data;
+      return action.payload;
     // case FAIL_PROFILE:
     //   return state;
     default:

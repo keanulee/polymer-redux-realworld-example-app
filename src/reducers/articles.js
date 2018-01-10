@@ -13,7 +13,7 @@ const articles = (state = [], action) => {
     // case REQUEST_ARTICLES:
     //   return state;
     case SET_ARTICLES:
-      return action.data.articles;
+      return action.payload;
     // case FAIL_ARTICLES:
     //   return state;
     default:

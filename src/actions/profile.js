@@ -25,10 +25,10 @@ export const fetchProfile = (username, token) => (dispatch) => {
 //   };
 // };
 
-const setProfile = (data) => {
+const setProfile = (profile) => {
   return {
     type: SET_PROFILE,
-    data
+    payload: profile
   };
 };
 

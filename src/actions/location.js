@@ -6,7 +6,7 @@ export const UPDATE_LOCATION = 'UPDATE_LOCATION';
 export const updateLocation = () => (dispatch, getState) => {
   dispatch({
     type: UPDATE_LOCATION,
-    location: window.location
+    payload: window.location
   });
 
   // NOTE: The below actions need to be created with the updated state (i.e. the state

@@ -58,7 +58,7 @@ export const createUser = (user) => (dispatch) => {
 const setUser = (user) => {
   return {
     type: SET_USER,
-    data: user
+    payload: user
   };
 };
 

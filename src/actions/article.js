@@ -69,7 +69,7 @@ export const deleteArticle = (slug, token) => (dispatch) => {
 const setArticle = (article) => {
   return {
     type: SET_ARTICLE,
-    data: article
+    payload: article
   };
 };
 

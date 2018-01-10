@@ -9,7 +9,7 @@ const user = (state = {
 }, action) => {
   switch (action.type) {
     case SET_USER:
-      return action.data;
+      return action.payload;
     default:
       return state;
   }
