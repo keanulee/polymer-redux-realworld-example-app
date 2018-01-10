@@ -1,27 +1,18 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-import '../../node_modules/@polymer/polymer/lib/elements/dom-if.js';
-import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
-import items, { currentItemSelector } from '../reducers/items.js';
+// import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
 import article, { articleSelector, currentArticleSelector } from '../reducers/article.js';
-import favorites from '../reducers/favorites.js';
 import { store } from '../store.js';
-import './hn-summary.js';
-import './hn-comment.js';
-import { fetchItem, fetchItemIfNeeded } from '../actions/items.js';
+// import './hn-summary.js';
+// import './hn-comment.js';
 import { fetchArticle } from '../actions/article.js';
-import { loadFavorites } from '../actions/favorites.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 
 store.addReducers({
-  favorites,
-  items,
   article
 });
 
-store.dispatch(loadFavorites());
-
-export class HnItemElement extends connect(store)(PolymerElement) {
+export class ArticleView extends connect(store)(PolymerElement) {
   static get template() {
     return `
     ${sharedStyles}
@@ -153,33 +144,14 @@ export class HnItemElement extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
-      item: Object,
-
       article: Object
     }
   }
 
   update(state) {
-    const item = currentItemSelector(state);
-    if (item) {
-      document.title = item.title;
-      this.setProperties({
-        favorites: state.favorites,
-        item
-      });
-    }
-
     this.setProperties({
       article: articleSelector(state)
     });
-  }
-
-  _isFavorite(favorites, item) {
-    return Boolean(favorites && item && favorites[item.id]);
-  }
-  
-  _reload() {
-    store.dispatch(fetchItem(this.item));
   }
 
   _getArticleAuthorHref(username) {
@@ -191,6 +163,6 @@ export class HnItemElement extends connect(store)(PolymerElement) {
   }
 }
 
-customElements.define('hn-item', HnItemElement);
+customElements.define('article-view', ArticleView);
 
-export { currentItemSelector, fetchItemIfNeeded, currentArticleSelector, fetchArticle };
+export { currentArticleSelector, fetchArticle };

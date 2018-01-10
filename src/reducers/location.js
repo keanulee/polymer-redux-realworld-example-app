@@ -31,18 +31,11 @@ export const pageSelector = createSelector(
   splitPathnameSelector,
   splitPath => {
     const p = splitPath[0];
-    if (p && p[0] === '@') return 'user';
+    if (p && p[0] === '@') return 'profile';
 
     switch (splitPath[0]) {
       case '':
-      // case 'new':
-      // case 'ask':
-      // case 'show':
-      // case 'jobs':
-      // case 'favorites':
-        return 'list';
-      // case 'user':
-      // case 'item':
+        return 'home';
       case 'article':
       case 'login':
       case 'register':

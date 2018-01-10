@@ -1,5 +1,5 @@
 function main() {
-  import(/* webpackMode: 'eager' */ './components/hn-app.js');
+  import(/* webpackMode: 'eager' */ './components/app-view.js');
 }
 
 if (!window.customElements || !('attachShadow' in Element.prototype)) {

@@ -1,27 +1,16 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
-import lists, { currentItemsSelector, currentListSelector } from '../reducers/lists.js';
-import items from '../reducers/items.js';
-import favorites from '../reducers/favorites.js';
 import articles, { articlesSelector } from '../reducers/articles.js';
 import { store } from '../store.js';
-import './hn-summary.js';
-import { fetchList, fetchListIfNeeded } from '../actions/lists.js';
 import { fetchArticles } from '../actions/articles.js';
-import { loadFavorites } from '../actions/favorites.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 
 store.addReducers({
-  lists,
-  favorites,
-  items,
   articles
 });
 
-store.dispatch(loadFavorites());
-
-export class HnListElement extends connect(store)(PolymerElement) {
+export class HomeView extends connect(store)(PolymerElement) {
   static get template() {
     return `
     ${sharedStyles}
@@ -103,42 +92,14 @@ export class HnListElement extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
-      list: Object,
-
-      favorites: Object,
-
-      items: Array,
-
       articles: Array
     }
   }
 
   update(state) {
-    const list = currentListSelector(state);
-    if (list) {
-      document.title = list.id;
-      const props = {
-        favorites: state.favorites,
-        list
-      };
-      const items = currentItemsSelector(state);
-      if (items) {
-        props.items = items;
-      }
-      this.setProperties(props);
-    }
-
     this.setProperties({
       articles: articlesSelector(state)
     });
-  }
-
-  _isFavorite(favorites, item) {
-    return Boolean(favorites && item && favorites[item.id]);
-  }
-  
-  _reload() {
-    store.dispatch(fetchList(this.list));
   }
 
   _getArticleAuthorHref(username) {
@@ -154,6 +115,6 @@ export class HnListElement extends connect(store)(PolymerElement) {
   }
 }
 
-customElements.define('hn-list', HnListElement);
+customElements.define('home-view', HomeView);
 
-export { currentListSelector, fetchListIfNeeded, fetchArticles };
+export { fetchArticles };

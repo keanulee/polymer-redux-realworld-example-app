@@ -11,23 +11,9 @@ export const updateLocation = (location) => (dispatch, getState) => {
   // NOTE: The below actions need to be created with the updated state (i.e. the state
   // with the new location.path), so they cannot be combined with UPDATE_LOCATION.
   switch (pageSelector(getState())) {
-    case 'list':
-      import(/* webpackChunkName: 'list' */ '../components/hn-list.js').then(module => {
-        // dispatch(module.fetchListIfNeeded(module.currentListSelector(getState())));
+    case 'home':
+      import(/* webpackChunkName: 'home' */ '../components/home-view.js').then(module => {
         dispatch(module.fetchArticles());
-      });
-      break;
-    case 'user':
-      import(/* webpackChunkName: 'user' */ '../components/hn-user.js').then(module => {
-        // dispatch(module.fetchUserIfNeeded(module.currentUserSelector(getState())));
-        dispatch(module.fetchProfile(module.currentProfileSelector(getState())));
-      });
-      break;
-    // case 'item':
-    case 'article':
-      import(/* webpackChunkName: 'item' */ '../components/hn-item.js').then(module => {
-        // dispatch(module.fetchItemIfNeeded(module.currentItemSelector(getState())));
-        dispatch(module.fetchArticle(module.currentArticleSelector(getState())));
       });
       break;
     case 'login':
@@ -38,6 +24,16 @@ export const updateLocation = (location) => (dispatch, getState) => {
     case 'register':
       import(/* webpackChunkName: 'register' */ '../components/register-view.js').then(module => {
         
+      });
+      break;
+    case 'profile':
+      import(/* webpackChunkName: 'profile' */ '../components/profile-view.js').then(module => {
+        dispatch(module.fetchProfile(module.currentProfileSelector(getState())));
+      });
+      break;
+    case 'article':
+      import(/* webpackChunkName: 'article' */ '../components/article-view.js').then(module => {
+        dispatch(module.fetchArticle(module.currentArticleSelector(getState())));
       });
       break;
   }

@@ -1,6 +1,4 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-/* Always load dom-if here for more efficient caching */
-import '../../node_modules/@polymer/polymer/lib/elements/dom-if.js';
 import './hn-invalid-page.js';
 import location, { pageSelector } from '../reducers/location.js';
 import { store } from '../store.js';
@@ -15,7 +13,7 @@ store.addReducers({
 
 installRouter(() => store.dispatch(updateLocation(window.location)));
 
-export class HnAppElement extends connect(store)(PolymerElement) {
+export class AppView extends connect(store)(PolymerElement) {
   static get template() {
     return `
     ${sharedStyles}
@@ -23,11 +21,11 @@ export class HnAppElement extends connect(store)(PolymerElement) {
       [page] > * {
         display: none;
       }
-      [page=list] hn-list,
-      [page=article] hn-item,
-      [page=user] hn-user,
+      [page=home] home-view,
       [page=login] login-view,
       [page=register] register-view,
+      [page=profile] profile-view,
+      [page=article] article-view,
       [page=invalid-page] hn-invalid-page {
         display: block;
       }
@@ -60,11 +58,11 @@ export class HnAppElement extends connect(store)(PolymerElement) {
       </div>
     </nav>
     <div page$="[[page]]">
-      <hn-list></hn-list>
-      <hn-item></hn-item>
-      <hn-user></hn-user>
+      <home-view></home-view>
       <login-view></login-view>
       <register-view></register-view>
+      <profile-view></profile-view>
+      <article-view></article-view>
       <hn-invalid-page></hn-invalid-page>
     </div>`;
   }
@@ -82,4 +80,4 @@ export class HnAppElement extends connect(store)(PolymerElement) {
   }
 }
 
-customElements.define('hn-app', HnAppElement);
+customElements.define('app-view', AppView);
