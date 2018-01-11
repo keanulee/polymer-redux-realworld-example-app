@@ -63,3 +63,10 @@ export const urlSearchParamsSelector = createSelector(
     }
   }
 );
+
+export const currentPageSelector = createSelector(
+  urlSearchParamsSelector,
+  params => {
+    return parseInt(params.get('page'), 10) || 0;
+  }
+)

@@ -1,11 +1,15 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
+import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
+import articles, { articlesSelector } from '../reducers/articles.js';
 import profile, { profileSelector, usernameSelector } from '../reducers/profile.js';
 import { store } from '../store.js';
 import { fetchProfile } from '../actions/profile.js';
+import { fetchArticles } from '../actions/articles.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 
 store.addReducers({
+  articles,
   profile
 });
 
@@ -49,46 +53,31 @@ export class ProfileView extends connect(store)(PolymerElement) {
               </ul>
             </div>
 
-            <div class="article-preview">
-              <div class="article-meta">
-                <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                <div class="info">
-                  <a href="" class="author">Eric Simons</a>
-                  <span class="date">January 20th</span>
+            <dom-repeat items="[[articles]]">
+              <template>
+                <div class="article-preview">
+                  <div class="article-meta">
+                    <a href$="[[_getArticleAuthorHref(item.author.username)]]">
+                      <img src="[[item.author.image]]" alt="[[item.author.username]]" />
+                    </a>
+                    <div class="info">
+                      <a href$="[[_getArticleAuthorHref(item.author.username)]]" class="author">
+                        [[item.author.username]]
+                      </a>
+                      <span class="date">[[_formatDate(item.createdAt)]]</span>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                      <i class="ion-heart"></i> 29
+                    </button>
+                  </div>
+                  <a href$="[[_getArticleHref(item.slug)]]" class="preview-link">
+                    <h1>[[item.title]]</h1>
+                    <p>[[item.description]]</p>
+                    <span>Read more...</span>
+                  </a>
                 </div>
-                <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i class="ion-heart"></i> 29
-                </button>
-              </div>
-              <a href="" class="preview-link">
-                <h1>How to build webapps that scale</h1>
-                <p>This is the description for the post.</p>
-                <span>Read more...</span>
-              </a>
-            </div>
-
-            <div class="article-preview">
-              <div class="article-meta">
-                <a href=""><img src="http://i.imgur.com/N4VcUeJ.jpg" /></a>
-                <div class="info">
-                  <a href="" class="author">Albert Pai</a>
-                  <span class="date">January 20th</span>
-                </div>
-                <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i class="ion-heart"></i> 32
-                </button>
-              </div>
-              <a href="" class="preview-link">
-                <h1>The song you won't ever stop singing. No matter how hard you try.</h1>
-                <p>This is the description for the post.</p>
-                <span>Read more...</span>
-                <ul class="tag-list">
-                  <li class="tag-default tag-pill tag-outline">Music</li>
-                  <li class="tag-default tag-pill tag-outline">Song</li>
-                </ul>
-              </a>
-            </div>
-
+              </template>
+            </dom-repeat>
 
           </div>
 
@@ -100,17 +89,32 @@ export class ProfileView extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
+      articles: Array,
+
       profile: Object
     }
   }
 
   update(state) {
     this.setProperties({
+      articles: articlesSelector(state),
       profile: profileSelector(state)
     });
+  }
+
+  _getArticleAuthorHref(username) {
+    return `/@${username}`;
+  }
+
+  _formatDate(date) {
+    return new Date(date).toDateString()
+  }
+
+  _getArticleHref(slug) {
+    return `/article/${slug}`;
   }
 }
 
 customElements.define('profile-view', ProfileView);
 
-export { usernameSelector, fetchProfile };
+export { usernameSelector, fetchProfile, fetchArticles };

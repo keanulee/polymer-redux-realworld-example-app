@@ -3,11 +3,11 @@
   "flat": true,
   "version": "1.0.0",
   "contributors": [],
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
     "@0xcda7a/redux-es6": "^3.7.2",
     "@polymer/polymer": "^3.0.0-pre.1",
+    "marked": "^0.3.12",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1"
   },

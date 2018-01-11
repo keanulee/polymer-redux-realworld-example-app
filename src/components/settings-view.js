@@ -7,7 +7,7 @@ import { store } from '../store.js';
 // import { fetchArticle, createArticle, updateArticle } from '../actions/article.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
-import { tokenSelector } from '../reducers/user.js';
+import { userSelector } from '../reducers/user.js';
 
 // store.addReducers({
 //   article
@@ -27,16 +27,16 @@ export class SettingsView extends connect(store)(PolymerElement) {
             <form on-submit="_submitForm">
               <fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control" type="text" placeholder="URL of profile picture">
+                    <input class="form-control" type="text" placeholder="URL of profile picture" value="[[user.image]]">
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+                    <input class="form-control form-control-lg" type="text" placeholder="Your Name" value="[[user.username]]">
                   </fieldset>
                   <fieldset class="form-group">
-                    <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you"></textarea>
+                    <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" value="[[user.bio]]"></textarea>
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Email">
+                    <input class="form-control form-control-lg" type="text" placeholder="Email" value="[[user.email]]">
                   </fieldset>
                   <fieldset class="form-group">
                     <input class="form-control form-control-lg" type="password" placeholder="Password">
@@ -55,11 +55,13 @@ export class SettingsView extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
+      user: Object
     }
   }
 
   update(state) {
     this.setProperties({
+      user: userSelector(state)
     });
   }
 

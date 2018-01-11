@@ -1,13 +1,14 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
-import articles, { articlesSelector } from '../reducers/articles.js';
+import articleList, { articlesSelector, articlesCountSelector } from '../reducers/articleList.js';
 import { store } from '../store.js';
-import { fetchArticles } from '../actions/articles.js';
+import { fetchArticles } from '../actions/articleList.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
+import { currentPageSelector } from '../reducers/location.js';
 
 store.addReducers({
-  articles
+  articleList
 });
 
 export class HomeView extends connect(store)(PolymerElement) {
@@ -64,6 +65,16 @@ export class HomeView extends connect(store)(PolymerElement) {
               </template>
             </dom-repeat>
 
+            <nav>
+              <ul class="pagination">
+                <dom-repeat items="[[pages]]">
+                  <template>
+                    <li class$="[[_getLinkClasses(index, currentPage)]]"><a class="page-link" href$="[[_getLinkHref(index)]]">[[_increment(index)]]</a></li>
+                  </template>
+                </dom-repeat>
+              </ul>
+            </nav>
+
           </div>
 
           <div class="col-md-3">
@@ -92,13 +103,19 @@ export class HomeView extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
-      articles: Array
+      articles: Array,
+
+      pageCount: Number,
+
+      currentPage: Number
     }
   }
 
   update(state) {
     this.setProperties({
-      articles: articlesSelector(state)
+      articles: articlesSelector(state),
+      pages: new Array(articlesCountSelector(state) / 10),
+      currentPage: currentPageSelector(state)
     });
   }
 
@@ -113,8 +130,20 @@ export class HomeView extends connect(store)(PolymerElement) {
   _getArticleHref(slug) {
     return `/article/${slug}`;
   }
+
+  _getLinkClasses(index, currentPage) {
+    return index === currentPage ? 'page-item active' : 'page-item';
+  }
+
+  _getLinkHref(index) {
+    return `?page=${index}`;
+  }
+
+  _increment(index) {
+    return index + 1;
+  }
 }
 
 customElements.define('home-view', HomeView);
 
-export { fetchArticles };
+export { fetchArticles, currentPageSelector };

@@ -2,13 +2,13 @@ import {
   // REQUEST_ARTICLES,
   SET_ARTICLES,
   // FAIL_ARTICLES
-} from '../actions/articles.js';
+} from '../actions/articleList.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
 // import { splitPathnameSelector } from './location.js';
 // import { itemsSelector } from './items.js';
 // import { favoritesSelector } from './favorites.js';
 
-const articles = (state = [], action) => {
+const articleList = (state = [], action) => {
   switch (action.type) {
     // case REQUEST_ARTICLES:
     //   return state;
@@ -48,9 +48,11 @@ const articles = (state = [], action) => {
 //   }
 // }
 
-export default articles;
+export default articleList;
 
-export const articlesSelector = state => state.articles;
+export const articlesSelector = state => state.articleList.articles;
+
+export const articlesCountSelector = state => state.articleList.articlesCount || 0;
 
 // export const currentListSelector = createSelector(
 //   listsSelector,

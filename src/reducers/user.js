@@ -17,7 +17,7 @@ const user = (state = {
 
 export default user;
 
-const userSelector = state => state.user;
+export const userSelector = state => state.user;
 
 export const tokenSelector = createSelector(
   userSelector,

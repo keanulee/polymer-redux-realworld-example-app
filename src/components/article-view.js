@@ -8,6 +8,7 @@ import { fetchArticle, deleteArticle } from '../actions/article.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { tokenSelector } from '../reducers/user.js';
+import '../../node_modules/marked/marked.min.js';
 
 store.addReducers({
   article
@@ -65,9 +66,7 @@ export class ArticleView extends connect(store)(PolymerElement) {
       <div class="container page">
 
         <div class="row article-content">
-          <div class="col-md-12">
-            <div>[[article.body]]</div>
-          </div>
+          <div class="col-md-12" inner-h-t-m-l="[[_marked(article.body)]]"></div>
         </div>
 
         <hr />
@@ -181,6 +180,10 @@ export class ArticleView extends connect(store)(PolymerElement) {
 
   _formatDate(date) {
     return new Date(date).toDateString()
+  }
+
+  _marked(body) {
+    return body ? window.marked(body): '';
   }
 }
 
