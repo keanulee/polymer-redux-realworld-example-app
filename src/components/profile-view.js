@@ -7,6 +7,7 @@ import { fetchProfile } from '../actions/profile.js';
 import { fetchArticles } from '../actions/articles.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
+import { pageIndexSelector } from '../reducers/location.js';
 
 store.addReducers({
   articles,
@@ -117,4 +118,4 @@ export class ProfileView extends connect(store)(PolymerElement) {
 
 customElements.define('profile-view', ProfileView);
 
-export { usernameSelector, fetchProfile, fetchArticles };
+export { usernameSelector, fetchProfile, fetchArticles, pageIndexSelector };

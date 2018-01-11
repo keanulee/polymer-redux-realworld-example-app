@@ -1,6 +1,6 @@
 import {
   // REQUEST_ARTICLES,
-  SET_ARTICLES,
+  SET_ARTICLE_LIST,
   // FAIL_ARTICLES
 } from '../actions/articleList.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
@@ -12,8 +12,11 @@ const articleList = (state = [], action) => {
   switch (action.type) {
     // case REQUEST_ARTICLES:
     //   return state;
-    case SET_ARTICLES:
-      return action.payload;
+    case SET_ARTICLE_LIST:
+      return {
+        ...state,
+        ...action.payload
+      };
     // case FAIL_ARTICLES:
     //   return state;
     default:
@@ -53,6 +56,8 @@ export default articleList;
 export const articlesSelector = state => state.articleList.articles;
 
 export const articlesCountSelector = state => state.articleList.articlesCount || 0;
+
+export const tagsSelector = state => state.articleList.tags;
 
 // export const currentListSelector = createSelector(
 //   listsSelector,

@@ -1,11 +1,11 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
-import articleList, { articlesSelector, articlesCountSelector } from '../reducers/articleList.js';
+import articleList, { articlesSelector, articlesCountSelector, tagsSelector } from '../reducers/articleList.js';
 import { store } from '../store.js';
-import { fetchArticles } from '../actions/articleList.js';
+import { fetchArticles, fetchTags } from '../actions/articleList.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
-import { currentPageSelector } from '../reducers/location.js';
+import { pageIndexSelector, tagSelector } from '../reducers/location.js';
 
 store.addReducers({
   articleList
@@ -69,7 +69,11 @@ export class HomeView extends connect(store)(PolymerElement) {
               <ul class="pagination">
                 <dom-repeat items="[[pages]]">
                   <template>
-                    <li class$="[[_getLinkClasses(index, currentPage)]]"><a class="page-link" href$="[[_getLinkHref(index)]]">[[_increment(index)]]</a></li>
+                    <li class$="[[_getLinkClasses(index, currentPage)]]">
+                      <a class="page-link" href$="[[_getLinkHref(index, currentTag)]]">
+                        [[_increment(index, currentTag)]]
+                      </a>
+                    </li>
                   </template>
                 </dom-repeat>
               </ul>
@@ -82,14 +86,13 @@ export class HomeView extends connect(store)(PolymerElement) {
               <p>Popular Tags</p>
 
               <div class="tag-list">
-                <a href="" class="tag-pill tag-default">programming</a>
-                <a href="" class="tag-pill tag-default">javascript</a>
-                <a href="" class="tag-pill tag-default">emberjs</a>
-                <a href="" class="tag-pill tag-default">angularjs</a>
-                <a href="" class="tag-pill tag-default">react</a>
-                <a href="" class="tag-pill tag-default">mean</a>
-                <a href="" class="tag-pill tag-default">node</a>
-                <a href="" class="tag-pill tag-default">rails</a>
+                <dom-repeat items="[[tags]]">
+                  <template>
+                    <a href$="[[_getTagHref(item)]]" class="tag-pill tag-default">
+                      [[item]]
+                    </a>
+                  </template>
+                </dom-repeat>
               </div>
             </div>
           </div>
@@ -107,15 +110,21 @@ export class HomeView extends connect(store)(PolymerElement) {
 
       pageCount: Number,
 
-      currentPage: Number
+      currentPage: Number,
+
+      currentTag: String,
+
+      tags: Array
     }
   }
 
   update(state) {
     this.setProperties({
       articles: articlesSelector(state),
-      pages: new Array(articlesCountSelector(state) / 10),
-      currentPage: currentPageSelector(state)
+      pages: new Array(Math.ceil(articlesCountSelector(state) / 10)),
+      currentPage: pageIndexSelector(state),
+      currentTag: tagSelector(state),
+      tags: tagsSelector(state)
     });
   }
 
@@ -135,15 +144,19 @@ export class HomeView extends connect(store)(PolymerElement) {
     return index === currentPage ? 'page-item active' : 'page-item';
   }
 
-  _getLinkHref(index) {
-    return `?page=${index}`;
+  _getLinkHref(index, currentTag) {
+    return currentTag ? `?tag=${currentTag}&page=${index}` : `?page=${index}`;
   }
 
   _increment(index) {
     return index + 1;
   }
+
+  _getTagHref(tag) {
+    return `?tag=${tag}`;
+  }
 }
 
 customElements.define('home-view', HomeView);
 
-export { fetchArticles, currentPageSelector };
+export { fetchArticles, fetchTags, pageIndexSelector, tagSelector };

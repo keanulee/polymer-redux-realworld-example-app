@@ -1,20 +1,26 @@
 import { api } from '../api.js';
 
 // export const REQUEST_ARTICLES = 'REQUEST_ARTICLES';
-export const SET_ARTICLES = 'SET_ARTICLES';
+export const SET_ARTICLE_LIST = 'SET_ARTICLE_LIST';
 // export const FAIL_ARTICLES = 'FAIL_ARTICLES';
 
 export const fetchArticles = (options, token) => (dispatch) => {
   const query = Object.keys(options).map(k => `${k}=${options[k]}`).join('&');
   api(`/articles?${query}`, token)
   .then(res => res.json())
-  .then(data => dispatch(setArticles(data)))
+  .then(data => dispatch(setArticleList(data)))
   // .catch(() => dispatch(failArticles(options)));
 };
 
-const setArticles = (data) => {
+export const fetchTags = (token) => (dispatch) => {
+  api(`/tags`, token)
+  .then(res => res.json())
+  .then(data => dispatch(setArticleList(data)))
+}
+
+const setArticleList = (data) => {
   return {
-    type: SET_ARTICLES,
+    type: SET_ARTICLE_LIST,
     payload: data
   };
 };
