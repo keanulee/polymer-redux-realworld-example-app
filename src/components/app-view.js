@@ -1,14 +1,13 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import './invalid-view.js';
 import location, { pageSelector } from '../reducers/location.js';
-import user from '../reducers/user.js';
+import user, { tokenSelector, userSelector } from '../reducers/user.js';
 import { store } from '../store.js';
 import { updateLocation } from '../actions/location.js';
 import { fetchUser } from '../actions/user.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { installRouter } from '../../lib/router.js';
 import { sharedStyles } from './shared-styles.js';
-import { tokenSelector } from '../reducers/user.js';
 
 store.addReducers({
   location,
@@ -19,7 +18,7 @@ installRouter(() => store.dispatch(updateLocation()));
 store.dispatch(fetchUser(tokenSelector(store.getState())));
 
 export class AppView extends connect(store)(LitElement) {
-  render({ page, loggedIn }) {
+  render({ page, user }) {
     return html`
     <style>
       ${sharedStyles}
@@ -46,7 +45,7 @@ export class AppView extends connect(store)(LitElement) {
             <!-- Add "active" class when you're on that page" -->
             <a class$="nav-link ${page === 'home' ? 'active' : ''}" href="/">Home</a>
           </li>
-          ${loggedIn ? html`
+          ${user.token ? html`
             <li class="nav-item">
               <a class="nav-link" href="/editor">
                 <i class="ion-compose"></i>&nbsp;New Post
@@ -55,6 +54,12 @@ export class AppView extends connect(store)(LitElement) {
             <li class="nav-item">
               <a class$="nav-link ${page === 'settings' ? 'active' : ''}" href="/settings">
                 <i class="ion-gear-a"></i>&nbsp;Settings
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class$="nav-link ${page === 'register' ? 'active' : ''}" href="/@${user.username}">
+                ${user.image && html`<img class="user-pic" src="${user.image}" alt="${user.username}">`}
+                ${user.username}
               </a>
             </li>
           ` : html`
@@ -84,13 +89,13 @@ export class AppView extends connect(store)(LitElement) {
     return {
       page: String,
 
-      loggedIn: Boolean
+      user: Object
     };
   }
 
   update(state) {
     this.page = pageSelector(state);
-    this.loggedIn = Boolean(tokenSelector(state));
+    this.user = userSelector(state);
   }
 }
 
