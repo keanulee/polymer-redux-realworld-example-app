@@ -4,7 +4,7 @@ import { sharedStyles } from './shared-styles.js';
 export class InvalidView extends PolymerElement {
   static get template() {
     return `
-    ${sharedStyles}
+    <style>${sharedStyles}</style>
     <h1>Page not found</h1>`;
   }
 }

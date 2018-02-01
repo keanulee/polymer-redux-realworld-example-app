@@ -1,5 +1,4 @@
-import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
+import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import articleList, { articlesSelector, articlesCountSelector, tagsSelector } from '../reducers/articleList.js';
 import { store } from '../store.js';
 import { fetchArticles, fetchTags } from '../actions/articleList.js';
@@ -11,10 +10,10 @@ store.addReducers({
   articleList
 });
 
-export class HomeView extends connect(store)(PolymerElement) {
-  static get template() {
-    return `
-    ${sharedStyles}
+export class HomeView extends connect(store)(LitElement) {
+  render({ articles, pages, currentPage, currentTag, tags }) {
+    return html`
+    <style>${sharedStyles}</style>
     <div class="home-page">
 
       <div class="banner">
@@ -39,43 +38,39 @@ export class HomeView extends connect(store)(PolymerElement) {
               </ul>
             </div>
 
-            <dom-repeat items="[[articles]]">
-              <template>
-                <div class="article-preview">
-                  <div class="article-meta">
-                    <a href$="[[_getArticleAuthorHref(item.author.username)]]">
-                      <img src="[[item.author.image]]" alt="[[item.author.username]]" />
-                    </a>
-                    <div class="info">
-                      <a href$="[[_getArticleAuthorHref(item.author.username)]]" class="author">
-                        [[item.author.username]]
-                      </a>
-                      <span class="date">[[_formatDate(item.createdAt)]]</span>
-                    </div>
-                    <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                      <i class="ion-heart"></i> 29
-                    </button>
-                  </div>
-                  <a href$="[[_getArticleHref(item.slug)]]" class="preview-link">
-                    <h1>[[item.title]]</h1>
-                    <p>[[item.description]]</p>
-                    <span>Read more...</span>
+            ${articles && articles.map(article => html`
+              <div class="article-preview">
+                <div class="article-meta">
+                  <a href="/@${article.author.username}">
+                    <img src="${article.author.image}" alt="${article.author.username}" />
                   </a>
+                  <div class="info">
+                    <a href="/@${article.author.username}" class="author">
+                      ${article.author.username}
+                    </a>
+                    <span class="date">${new Date(article.createdAt).toDateString()}</span>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                    <i class="ion-heart"></i> 29
+                  </button>
                 </div>
-              </template>
-            </dom-repeat>
+                <a href$="/article/${article.slug}" class="preview-link">
+                  <h1>${article.title}</h1>
+                  <p>${article.description}</p>
+                  <span>Read more...</span>
+                </a>
+              </div>
+            `)}
 
             <nav>
               <ul class="pagination">
-                <dom-repeat items="[[pages]]">
-                  <template>
-                    <li class$="[[_getLinkClasses(index, currentPage)]]">
-                      <a class="page-link" href$="[[_getLinkHref(index, currentTag)]]">
-                        [[_increment(index, currentTag)]]
-                      </a>
-                    </li>
-                  </template>
-                </dom-repeat>
+                ${pages.map((page, index) => html`
+                  <li class$="page-item ${index === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="${currentTag ? `?tag=${currentTag}&page=${index}` : `?page=${index}`}">
+                      ${page}
+                    </a>
+                  </li>
+                `)}
               </ul>
             </nav>
 
@@ -86,13 +81,9 @@ export class HomeView extends connect(store)(PolymerElement) {
               <p>Popular Tags</p>
 
               <div class="tag-list">
-                <dom-repeat items="[[tags]]">
-                  <template>
-                    <a href$="[[_getTagHref(item)]]" class="tag-pill tag-default">
-                      [[item]]
-                    </a>
-                  </template>
-                </dom-repeat>
+                ${tags && tags.map(tag => html`
+                  <a href="?tag=${tag}" class="tag-pill tag-default">${tag}</a>
+                `)}
               </div>
             </div>
           </div>
@@ -108,7 +99,7 @@ export class HomeView extends connect(store)(PolymerElement) {
     return {
       articles: Array,
 
-      pageCount: Number,
+      pages: Number,
 
       currentPage: Number,
 
@@ -119,41 +110,16 @@ export class HomeView extends connect(store)(PolymerElement) {
   }
 
   update(state) {
-    this.setProperties({
-      articles: articlesSelector(state),
-      pages: new Array(Math.ceil(articlesCountSelector(state) / 10)),
-      currentPage: pageIndexSelector(state),
-      currentTag: tagSelector(state),
-      tags: tagsSelector(state)
-    });
-  }
-
-  _getArticleAuthorHref(username) {
-    return `/@${username}`;
-  }
-
-  _formatDate(date) {
-    return new Date(date).toDateString()
-  }
-
-  _getArticleHref(slug) {
-    return `/article/${slug}`;
-  }
-
-  _getLinkClasses(index, currentPage) {
-    return index === currentPage ? 'page-item active' : 'page-item';
-  }
-
-  _getLinkHref(index, currentTag) {
-    return currentTag ? `?tag=${currentTag}&page=${index}` : `?page=${index}`;
-  }
-
-  _increment(index) {
-    return index + 1;
-  }
-
-  _getTagHref(tag) {
-    return `?tag=${tag}`;
+    const pageCount = Math.ceil(articlesCountSelector(state) / 10);
+    const pages = [];
+    for (let i = 1; i <= pageCount; ++i) {
+      pages.push(i);
+    }
+    this.articles = articlesSelector(state);
+    this.pages = pages;
+    this.currentPage = pageIndexSelector(state);
+    this.currentTag = tagSelector(state);
+    this.tags = tagsSelector(state);
   }
 }
 

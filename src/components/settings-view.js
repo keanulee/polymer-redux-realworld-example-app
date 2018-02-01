@@ -16,7 +16,7 @@ import { userSelector } from '../reducers/user.js';
 export class SettingsView extends connect(store)(PolymerElement) {
   static get template() {
     return `
-    ${sharedStyles}
+    <style>${sharedStyles}</style>
     <div class="settings-page">
       <div class="container page">
         <div class="row">

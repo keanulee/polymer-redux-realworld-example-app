@@ -7,7 +7,7 @@ import { loginUser } from '../actions/user.js';
 export class LoginView extends connect(store)(PolymerElement) {
   static get template() {
     return `
-    ${sharedStyles}
+    <style>${sharedStyles}</style>
     <div class="auth-page">
       <div class="container page">
         <div class="row">

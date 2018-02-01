@@ -17,7 +17,7 @@ store.addReducers({
 export class ProfileView extends connect(store)(PolymerElement) {
   static get template() {
     return `
-    ${sharedStyles}
+    <style>${sharedStyles}</style>
     <div class="profile-page">
 
       <div class="user-info">

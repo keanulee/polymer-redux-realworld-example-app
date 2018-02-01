@@ -1,4 +1,4 @@
-import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
+import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import './invalid-view.js';
 import location, { pageSelector } from '../reducers/location.js';
 import user from '../reducers/user.js';
@@ -18,11 +18,12 @@ store.addReducers({
 installRouter(() => store.dispatch(updateLocation()));
 store.dispatch(fetchUser(tokenSelector(store.getState())));
 
-export class AppView extends connect(store)(PolymerElement) {
-  static get template() {
-    return `
-    ${sharedStyles}
+export class AppView extends connect(store)(LitElement) {
+  render({ page, loggedIn }) {
+    return html`
     <style>
+      ${sharedStyles}
+
       [page] > * {
         display: none;
       }
@@ -43,28 +44,31 @@ export class AppView extends connect(store)(PolymerElement) {
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <!-- Add "active" class when you're on that page" -->
-            <a class$="[[_getLinkClasses(page, 'home')]]" href="/">Home</a>
+            <a class$="nav-link ${page === 'home' ? 'active' : ''}" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/editor">
-              <i class="ion-compose"></i>&nbsp;New Post
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class$="[[_getLinkClasses(page, 'settings')]]" href="/settings">
-              <i class="ion-gear-a"></i>&nbsp;Settings
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class$="[[_getLinkClasses(page, 'login')]]" href="/login">Sign in</a>
-          </li>
-          <li class="nav-item">
-            <a class$="[[_getLinkClasses(page, 'register')]]" href="/register">Sign up</a>
-          </li>
+          ${loggedIn ? html`
+            <li class="nav-item">
+              <a class="nav-link" href="/editor">
+                <i class="ion-compose"></i>&nbsp;New Post
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class$="nav-link ${page === 'settings' ? 'active' : ''}" href="/settings">
+                <i class="ion-gear-a"></i>&nbsp;Settings
+              </a>
+            </li>
+          ` : html`
+            <li class="nav-item">
+              <a class$="nav-link ${page === 'login' ? 'active' : ''}" href="/login">Sign in</a>
+            </li>
+            <li class="nav-item">
+              <a class$="nav-link ${page === 'register' ? 'active' : ''}" href="/register">Sign up</a>
+            </li>
+          `}
         </ul>
       </div>
     </nav>
-    <div page$="[[page]]">
+    <div page$="${page}">
       <home-view></home-view>
       <login-view></login-view>
       <register-view></register-view>
@@ -78,18 +82,15 @@ export class AppView extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
-      page: String
+      page: String,
+
+      loggedIn: Boolean
     };
   }
 
   update(state) {
-    this.setProperties({
-      page: pageSelector(state)
-    });
-  }
-
-  _getLinkClasses(page, target) {
-    return page === target ? 'nav-link active' : 'nav-link';
+    this.page = pageSelector(state);
+    this.loggedIn = Boolean(tokenSelector(state));
   }
 }
 

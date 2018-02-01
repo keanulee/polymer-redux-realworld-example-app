@@ -17,7 +17,7 @@ store.addReducers({
 export class ArticleView extends connect(store)(PolymerElement) {
   static get template() {
     return `
-    ${sharedStyles}
+    <style>${sharedStyles}</style>
     <div class="article-page">
 
       <div class="banner">

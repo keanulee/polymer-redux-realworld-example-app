@@ -16,7 +16,7 @@ store.addReducers({
 export class EditorView extends connect(store)(PolymerElement) {
   static get template() {
     return `
-    ${sharedStyles}
+    <style>${sharedStyles}</style>
     <div class="editor-page">
       <div class="container page">
         <div class="row">
