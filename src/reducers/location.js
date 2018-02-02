@@ -63,15 +63,3 @@ export const urlSearchParamsSelector = createSelector(
     }
   }
 );
-
-export const pageIndexSelector = createSelector(
-  urlSearchParamsSelector,
-  params => {
-    return parseInt(params.get('page'), 10) || 0;
-  }
-)
-
-export const tagSelector = createSelector(
-  urlSearchParamsSelector,
-  params => params.get('tag')
-)

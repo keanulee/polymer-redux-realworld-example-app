@@ -55,9 +55,15 @@ export default articleList;
 
 export const articlesSelector = state => state.articleList.articles;
 
-export const articlesCountSelector = state => state.articleList.articlesCount || 0;
+export const articlesCountSelector = state => state.articleList.articlesCount;
 
 export const tagsSelector = state => state.articleList.tags;
+
+export const currentPageSelector = state => state.articleList.currentPage;
+
+export const tagSelector = state => state.articleList.tag;
+
+export const tabSelector = state => state.articleList.tab;
 
 // export const currentListSelector = createSelector(
 //   listsSelector,

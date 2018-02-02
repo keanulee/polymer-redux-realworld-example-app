@@ -14,14 +14,12 @@ export const updateLocation = () => (dispatch, getState) => {
   switch (pageSelector(getState())) {
     case 'home':
       import(/* webpackChunkName: 'home' */ '../components/home-view.js').then(module => {
+        dispatch(module.setArticleList({
+          tab: 'all'
+        }));
         const state = getState();
-        const pageIndex = module.pageIndexSelector(state);
         const limit = 10;
-        const options = { limit, offset: limit * pageIndex };
-        const tag = module.tagSelector(state);
-        if (tag) {
-          options.tag = tag;
-        }
+        const options = { limit };
         const token = tokenSelector(state);
         dispatch(module.fetchArticles(options, token));
         dispatch(module.fetchTags(token));
@@ -41,10 +39,10 @@ export const updateLocation = () => (dispatch, getState) => {
       import(/* webpackChunkName: 'profile' */ '../components/profile-view.js').then(module => {
         const state = getState();
         const username = module.usernameSelector(state);
-        const pageIndex = module.pageIndexSelector(state);
+        const currentPage = module.currentPageSelector(state);
         const limit = 5;
         dispatch(module.fetchProfile(username, tokenSelector(state)));
-        dispatch(module.fetchArticles({ author: username, limit, offset: limit * pageIndex }, tokenSelector(state)));
+        dispatch(module.fetchArticles({ author: username, limit, offset: limit * currentPage }, tokenSelector(state)));
       });
       break;
     case 'settings':

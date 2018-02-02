@@ -16,9 +16,9 @@ export const fetchTags = (token) => (dispatch) => {
   api(`/tags`, token)
   .then(res => res.json())
   .then(data => dispatch(setArticleList(data)))
-}
+};
 
-const setArticleList = (data) => {
+export const setArticleList = (data) => {
   return {
     type: SET_ARTICLE_LIST,
     payload: data

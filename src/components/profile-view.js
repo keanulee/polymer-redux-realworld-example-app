@@ -1,13 +1,12 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
-import articleList, { articlesSelector } from '../reducers/articleList.js';
+import articleList, { articlesSelector, currentPageSelector } from '../reducers/articleList.js';
 import profile, { profileSelector, usernameSelector } from '../reducers/profile.js';
 import { store } from '../store.js';
 import { fetchProfile } from '../actions/profile.js';
 import { fetchArticles } from '../actions/articleList.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
-import { pageIndexSelector } from '../reducers/location.js';
 
 store.addReducers({
   articleList,
@@ -118,4 +117,4 @@ export class ProfileView extends connect(store)(PolymerElement) {
 
 customElements.define('profile-view', ProfileView);
 
-export { usernameSelector, fetchProfile, fetchArticles, pageIndexSelector };
+export { usernameSelector, fetchProfile, fetchArticles, currentPageSelector };
