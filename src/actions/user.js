@@ -27,9 +27,9 @@ export const loginUser = (user) => (dispatch) => {
   })
   .then(res => res.json())
   .then(data => {
-    // if (data.error) {
-    //   throw data.error;
-    // }
+    if (data.errors) {
+      throw data.errors;
+    }
     dispatch(setUser(data.user));
     window.history.pushState({}, '', '/');
     dispatch(updateLocation())

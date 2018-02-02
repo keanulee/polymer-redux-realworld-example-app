@@ -1,12 +1,12 @@
-import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
+import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { store } from '../store.js';
 import { connect } from '../../lib/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { loginUser } from '../actions/user.js';
 
-export class LoginView extends connect(store)(PolymerElement) {
-  static get template() {
-    return `
+export class LoginView extends connect(store)(LitElement) {
+  render() {
+    return html`
     <style>${sharedStyles}</style>
     <div class="auth-page">
       <div class="container page">
@@ -18,12 +18,12 @@ export class LoginView extends connect(store)(PolymerElement) {
               <a href="/register">Need an account?</a>
             </p>
 
-            <form on-submit="_submitForm">
+            <form on-submit="${e =>this._submitForm(e)}">
               <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="text" placeholder="Email">
+                <input id="email" class="form-control form-control-lg" type="text" placeholder="Email">
               </fieldset>
               <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="password" placeholder="Password">
+                <input id="password" class="form-control form-control-lg" type="password" placeholder="Password">
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
                 Sign in
@@ -42,13 +42,13 @@ export class LoginView extends connect(store)(PolymerElement) {
   }
 
   update(state) {
-    this.setProperties({
-    });
   }
 
   _submitForm(e) {
     e.preventDefault();
-    store.dispatch(loginUser({email: "romanticclient@abc.com", password: "romanticclient"}));
+    const email = e.target.querySelector('#email').value;
+    const password = e.target.querySelector('#password').value;
+    store.dispatch(loginUser({email, password}));
   }
 }
 
