@@ -1,5 +1,4 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
-// import '../../node_modules/@polymer/polymer/lib/elements/dom-repeat.js';
 // import article, { articleSelector, slugSelector } from '../reducers/article.js';
 import { store } from '../store.js';
 // import './hn-summary.js';
