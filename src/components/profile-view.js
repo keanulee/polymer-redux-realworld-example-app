@@ -64,8 +64,9 @@ export class ProfileView extends connect(store)(LitElement) {
                     </a>
                     <span class="date">${new Date(article.createdAt).toDateString()}</span>
                   </div>
-                  <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i class="ion-heart"></i> 29
+                  <button class="btn btn-outline-primary btn-sm pull-xs-right" on-click="${e => this._toggleFavorite(article)}">
+                    <i class="ion-heart"></i>
+                    ${article.favoritesCount}
                   </button>
                 </div>
                 <a href="/article/${article.slug}" class="preview-link">
@@ -95,6 +96,10 @@ export class ProfileView extends connect(store)(LitElement) {
   update(state) {
     this.articles = articlesSelector(state);
     this.profile = profileSelector(state);
+  }
+
+  _toggleFavorite(article) {
+    // TODO: implement
   }
 }
 
