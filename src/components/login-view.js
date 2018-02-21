@@ -46,8 +46,9 @@ export class LoginView extends connect(store)(LitElement) {
 
   _submitForm(e) {
     e.preventDefault();
-    const email = e.target.querySelector('#email').value;
-    const password = e.target.querySelector('#password').value;
+    const formElements = e.target.elements;
+    const email = formElements.email.value;
+    const password = formElements.password.value;
     store.dispatch(loginUser({email, password}));
   }
 }
