@@ -9,4 +9,4 @@ An WIP implementation of [RealWorld example app](https://github.com/gothinkster/
 
 ## Auth
 
-For now, just click "Sign in" in the Sign in page to get an auth token in localstorage for the sample account.
+The register page isn't implemented yet but the login page is. You can make an account from a complete implementation and use it here.
