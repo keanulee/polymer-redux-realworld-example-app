@@ -26,7 +26,7 @@ export class RegisterView extends connect(store)(LitElement) {
               </ul>
             `}
 
-            <form on-submit="${e =>this._submitForm(e)}">
+            <form on-submit="${e => this._submitForm(e)}">
               <fieldset class="form-group">
                 <input id="username" class="form-control form-control-lg" type="text" placeholder="Your Name">
               </fieldset>

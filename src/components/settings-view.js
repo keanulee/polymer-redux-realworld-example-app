@@ -1,4 +1,4 @@
-import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
+import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 // import article, { articleSelector, slugSelector } from '../reducers/article.js';
 import { store } from '../store.js';
 // import './hn-summary.js';
@@ -12,9 +12,9 @@ import { userSelector } from '../reducers/user.js';
 //   article
 // });
 
-export class SettingsView extends connect(store)(PolymerElement) {
-  static get template() {
-    return `
+export class SettingsView extends connect(store)(LitElement) {
+  render({ user }) {
+    return html`
     <style>${sharedStyles}</style>
     <div class="settings-page">
       <div class="container page">
@@ -23,19 +23,19 @@ export class SettingsView extends connect(store)(PolymerElement) {
           <div class="col-md-6 offset-md-3 col-xs-12">
             <h1 class="text-xs-center">Your Settings</h1>
 
-            <form on-submit="_submitForm">
+            <form on-submit="${e => this._submitForm(e)}">
               <fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control" type="text" placeholder="URL of profile picture" value="[[user.image]]">
+                    <input class="form-control" type="text" placeholder="URL of profile picture" value="${user.image}">
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Your Name" value="[[user.username]]">
+                    <input class="form-control form-control-lg" type="text" placeholder="Your Name" value="${user.username}">
                   </fieldset>
                   <fieldset class="form-group">
-                    <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" value="[[user.bio]]"></textarea>
+                    <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" value="${user.bio}"></textarea>
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Email" value="[[user.email]]">
+                    <input class="form-control form-control-lg" type="text" placeholder="Email" value="${user.email}">
                   </fieldset>
                   <fieldset class="form-group">
                     <input class="form-control form-control-lg" type="password" placeholder="Password">
@@ -59,9 +59,7 @@ export class SettingsView extends connect(store)(PolymerElement) {
   }
 
   stateChanged(state) {
-    this.setProperties({
-      user: userSelector(state)
-    });
+    this.user = userSelector(state);
   }
 
   _submitForm(e) {

@@ -26,7 +26,7 @@ export class LoginView extends connect(store)(LitElement) {
               </ul>
             `}
 
-            <form on-submit="${e =>this._submitForm(e)}">
+            <form on-submit="${e => this._submitForm(e)}">
               <fieldset class="form-group">
                 <input id="email" class="form-control form-control-lg" type="email" placeholder="Email">
               </fieldset>
