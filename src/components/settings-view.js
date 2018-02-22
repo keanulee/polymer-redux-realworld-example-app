@@ -1,16 +1,9 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
-// import article, { articleSelector, slugSelector } from '../reducers/article.js';
 import { store } from '../store.js';
-// import './hn-summary.js';
-// import './hn-comment.js';
-// import { fetchArticle, createArticle, updateArticle } from '../actions/article.js';
+import { updateUser } from '../actions/user.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
-import { userSelector } from '../reducers/user.js';
-
-// store.addReducers({
-//   article
-// });
+import { userSelector, tokenSelector } from '../reducers/user.js';
 
 export class SettingsView extends connect(store)(LitElement) {
   render({ user }) {
@@ -26,19 +19,19 @@ export class SettingsView extends connect(store)(LitElement) {
             <form on-submit="${e => this._submitForm(e)}">
               <fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control" type="text" placeholder="URL of profile picture" value="${user.image}">
+                    <input id="image" class="form-control" type="text" placeholder="URL of profile picture" value="${user.image}">
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Your Name" value="${user.username}">
+                    <input id="username" class="form-control form-control-lg" type="text" placeholder="Your Name" value="${user.username}">
                   </fieldset>
                   <fieldset class="form-group">
-                    <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" value="${user.bio}"></textarea>
+                    <textarea id="bio" class="form-control form-control-lg" rows="8" placeholder="Short bio about you" value="${user.bio}"></textarea>
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Email" value="${user.email}">
+                    <input id="email" class="form-control form-control-lg" type="text" placeholder="Email" value="${user.email}">
                   </fieldset>
                   <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="password" placeholder="Password">
+                    <input id="password" class="form-control form-control-lg" type="password" placeholder="Password">
                   </fieldset>
                   <button class="btn btn-lg btn-primary pull-xs-right">
                     Update Settings
@@ -54,16 +47,31 @@ export class SettingsView extends connect(store)(LitElement) {
   
   static get properties() {
     return {
+      token: String,
+
       user: Object
     }
   }
 
   stateChanged(state) {
+    this.token = tokenSelector(state);
     this.user = userSelector(state);
   }
 
   _submitForm(e) {
     e.preventDefault();
+    const formElements = e.target.elements;
+    const user = {
+      bio: formElements.bio.value,
+      email: formElements.email.value,
+      image: formElements.image.value,
+      username: formElements.username.value
+    };
+    const password = formElements.password.value;
+    if (password) {
+      user.password = password;
+    }
+    store.dispatch(updateUser(user, this.token));
   }
 }
 

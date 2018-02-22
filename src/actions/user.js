@@ -1,7 +1,6 @@
 import { api } from '../api.js';
 import { updateLocation } from './location.js';
 
-// export const REQUEST_USER = 'REQUEST_USER';
 export const SET_USER = 'SET_USER';
 export const FAIL_USER = 'FAIL_USER';
 
@@ -9,13 +8,7 @@ export const fetchUser = (token) => (dispatch) => {
   if (token) {
     api('/user', token)
     .then(res => res.json())
-    .then(data => {
-      // if (data.error) {
-      //   throw data.error;
-      // }
-      dispatch(setUser(data.user));
-    })
-    // .catch(() => dispatch(failUser(user.id)));
+    .then(data => dispatch(setUser(data.user)));
   }
 };
 
@@ -33,7 +26,7 @@ export const loginUser = (user) => (dispatch) => {
     }
     dispatch(setUser(data.user));
     window.history.pushState({}, '', '/');
-    dispatch(updateLocation())
+    dispatch(updateLocation());
     localStorage.setItem('jwt', data.user.token);
   })
   .catch(() => dispatch(failUser({network: 'unavailable'})));
@@ -53,24 +46,31 @@ export const createUser = (user) => (dispatch) => {
     }
     dispatch(setUser(data.user));
     window.history.pushState({}, '', '/');
-    dispatch(updateLocation())
+    dispatch(updateLocation());
     localStorage.setItem('jwt', data.user.token);
   })
   .catch(() => dispatch(failUser({network: 'unavailable'})));
 };
 
-// export const fetchUserIfNeeded = (user) => (dispatch) => {
-//   if (user && !user.created_time && !user.isFetching) {
-//     dispatch(fetchUser(user));
-//   }
-// };
-
-// const requestUser = (userId) => {
-//   return {
-//     type: REQUEST_USER,
-//     userId
-//   };
-// };
+export const updateUser = (user, token) => (dispatch) => {
+  api('/user', token, {
+    method: 'PUT',
+    headers: {'content-type': 'application/json'},
+    body: JSON.stringify({user})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.errors) {
+      dispatch(failUser(data.errors));
+      return;
+    }
+    dispatch(setUser(data.user));
+    window.history.pushState({}, '', '/');
+    dispatch(updateLocation());
+    localStorage.setItem('jwt', data.user.token);
+  })
+  .catch(() => dispatch(failUser({network: 'unavailable'})));
+};
 
 const setUser = (user) => {
   return {

@@ -4,7 +4,6 @@ import {
 } from '../actions/user.js';
 import { UPDATE_LOCATION } from '../actions/location.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
-// import { splitPathnameSelector, urlSearchParamsSelector } from './location.js';
 
 const user = (state = {
   token: localStorage.getItem('jwt')

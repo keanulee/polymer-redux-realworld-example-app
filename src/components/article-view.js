@@ -2,15 +2,15 @@ import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-el
 import { unsafeHTML } from '../../node_modules/lit-html/lib/unsafe-html.js';
 import article, { articleSelector, slugSelector } from '../reducers/article.js';
 import { store } from '../store.js';
-// import './hn-summary.js';
-// import './hn-comment.js';
 import { fetchArticle, deleteArticle } from '../actions/article.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { tokenSelector, userSelector } from '../reducers/user.js';
-// HACK(keanulee): Using the minified build that defines a global - consider using
-// a library that provides an export instead.
+
+// HACK(keanulee): There's no web-compatible module version of marked, so use the min.js
+// version that defines a global for development, and use the require() syntax for webpack.
 import '../../node_modules/marked/marked.min.js';
+const marked = window.marked || require('marked');
 
 store.addReducers({
   article
@@ -71,7 +71,7 @@ export class ArticleView extends connect(store)(LitElement) {
 
           <div class="row article-content">
             <div class="col-xs-12">
-              <div>${article && article.body && unsafeHTML(window.marked(article.body))}</div>
+              <div>${article && article.body && unsafeHTML(marked(article.body))}</div>
             </div>
           </div>
 
