@@ -3,7 +3,7 @@ import { updateLocation } from './location.js';
 
 // export const REQUEST_USER = 'REQUEST_USER';
 export const SET_USER = 'SET_USER';
-// export const FAIL_USER = 'FAIL_USER';
+export const FAIL_USER = 'FAIL_USER';
 
 export const fetchUser = (token) => (dispatch) => {
   if (token) {
@@ -28,18 +28,35 @@ export const loginUser = (user) => (dispatch) => {
   .then(res => res.json())
   .then(data => {
     if (data.errors) {
-      throw data.errors;
+      dispatch(failUser(data.errors));
+      return;
     }
     dispatch(setUser(data.user));
     window.history.pushState({}, '', '/');
     dispatch(updateLocation())
     localStorage.setItem('jwt', data.user.token);
   })
-  // .catch(() => dispatch(failUser(user.id)));
+  .catch(() => dispatch(failUser({network: 'unavailable'})));
 };
 
 export const createUser = (user) => (dispatch) => {
-  // TODO
+  api('/users', null /* token */, {
+    method: 'POST',
+    headers: {'content-type': 'application/json'},
+    body: JSON.stringify({user})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.errors) {
+      dispatch(failUser(data.errors));
+      return;
+    }
+    dispatch(setUser(data.user));
+    window.history.pushState({}, '', '/');
+    dispatch(updateLocation())
+    localStorage.setItem('jwt', data.user.token);
+  })
+  .catch(() => dispatch(failUser({network: 'unavailable'})));
 };
 
 // export const fetchUserIfNeeded = (user) => (dispatch) => {
@@ -62,9 +79,9 @@ const setUser = (user) => {
   };
 };
 
-// const failUser = (userId) => {
-//   return {
-//     type: FAIL_USER,
-//     userId
-//   };
-// };
+const failUser = (errors) => {
+  return {
+    type: FAIL_USER,
+    payload: errors
+  };
+};

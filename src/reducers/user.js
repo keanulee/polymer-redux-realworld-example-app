@@ -1,6 +1,8 @@
 import {
-  SET_USER
+  SET_USER,
+  FAIL_USER
 } from '../actions/user.js';
+import { UPDATE_LOCATION } from '../actions/location.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
 // import { splitPathnameSelector, urlSearchParamsSelector } from './location.js';
 
@@ -11,7 +13,18 @@ const user = (state = {
     case SET_USER:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
+        errors: null
+      };
+    case FAIL_USER:
+      return {
+        ...state,
+        errors: action.payload
+      };
+    case UPDATE_LOCATION:
+      return {
+        ...state,
+        errors: null
       };
     default:
       return state;

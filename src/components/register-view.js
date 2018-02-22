@@ -1,12 +1,12 @@
-import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
+import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { store } from '../store.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { createUser } from '../actions/user.js';
 
-export class RegisterView extends connect(store)(PolymerElement) {
-  static get template() {
-    return `
+export class RegisterView extends connect(store)(LitElement) {
+  render({ errors }) {
+    return html`
     <style>${sharedStyles}</style>
     <div class="auth-page">
       <div class="container page">
@@ -18,19 +18,23 @@ export class RegisterView extends connect(store)(PolymerElement) {
               <a href="/login">Have an account?</a>
             </p>
 
-            <ul class="error-messages">
-              <li>That email is already taken</li>
-            </ul>
+            ${errors && html`
+              <ul class="error-messages">
+                ${Object.keys(errors).map(field => html`
+                  <li>${field} ${errors[field]}</li>
+                `)}
+              </ul>
+            `}
 
-            <form>
+            <form on-submit="${e =>this._submitForm(e)}">
               <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+                <input id="username" class="form-control form-control-lg" type="text" placeholder="Your Name">
               </fieldset>
               <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="text" placeholder="Email">
+                <input id="email" class="form-control form-control-lg" type="email" placeholder="Email">
               </fieldset>
               <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="password" placeholder="Password">
+                <input id="password" class="form-control form-control-lg" type="password" placeholder="Password">
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
                 Sign up
@@ -45,16 +49,21 @@ export class RegisterView extends connect(store)(PolymerElement) {
   
   static get properties() {
     return {
-    }
+      errors: Object
+    };
   }
 
   stateChanged(state) {
-    this.setProperties({
-    });
+    this.errors = state.user.errors;
   }
-  
-  _reload() {
-    store.dispatch(createUser({}));
+
+  _submitForm(e) {
+    e.preventDefault();
+    const formElements = e.target.elements;
+    const username = formElements.username.value;
+    const email = formElements.email.value;
+    const password = formElements.password.value;
+    store.dispatch(createUser({username, email, password}));
   }
 }
 

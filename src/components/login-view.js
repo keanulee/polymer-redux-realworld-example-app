@@ -5,7 +5,7 @@ import { sharedStyles } from './shared-styles.js';
 import { loginUser } from '../actions/user.js';
 
 export class LoginView extends connect(store)(LitElement) {
-  render() {
+  render({ errors }) {
     return html`
     <style>${sharedStyles}</style>
     <div class="auth-page">
@@ -18,9 +18,17 @@ export class LoginView extends connect(store)(LitElement) {
               <a href="/register">Need an account?</a>
             </p>
 
+            ${errors && html`
+              <ul class="error-messages">
+                ${Object.keys(errors).map(field => html`
+                  <li>${field} ${errors[field]}</li>
+                `)}
+              </ul>
+            `}
+
             <form on-submit="${e =>this._submitForm(e)}">
               <fieldset class="form-group">
-                <input id="email" class="form-control form-control-lg" type="text" placeholder="Email">
+                <input id="email" class="form-control form-control-lg" type="email" placeholder="Email">
               </fieldset>
               <fieldset class="form-group">
                 <input id="password" class="form-control form-control-lg" type="password" placeholder="Password">
@@ -38,10 +46,12 @@ export class LoginView extends connect(store)(LitElement) {
   
   static get properties() {
     return {
-    }
+      errors: Object
+    };
   }
 
   stateChanged(state) {
+    this.errors = state.user.errors;
   }
 
   _submitForm(e) {
