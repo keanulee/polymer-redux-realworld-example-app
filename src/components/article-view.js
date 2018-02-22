@@ -39,12 +39,12 @@ export class ArticleView extends connect(store)(LitElement) {
                 </a>
                 <span class="date">${new Date(article.createdAt).toDateString()}</span>
               </div>
-              <button class="btn btn-sm btn-outline-secondary">
+              <button class="btn btn-sm btn-outline-secondary" on-click="${e => this._toggleFollowing(article.author)}">
                 <i class="ion-plus-round"></i>
                 &nbsp;
                 Follow ${article.author.username}
               </button>
-              <button class="btn btn-sm btn-outline-primary">
+              <button class="btn btn-sm btn-outline-primary" on-click="${e => this._toggleFavorite(article)}">
                 <i class="ion-heart"></i>
                 &nbsp;
                 Favorite Post
@@ -89,13 +89,13 @@ export class ArticleView extends connect(store)(LitElement) {
                 <span class="date">${new Date(article.createdAt).toDateString()}</span>
               </div>
 
-              <button class="btn btn-sm btn-outline-secondary">
+              <button class="btn btn-sm btn-outline-secondary" on-click="${e => this._toggleFollowing(article.author)}">
                 <i class="ion-plus-round"></i>
                 &nbsp;
                 Follow ${article.author.username}
               </button>
               &nbsp;
-              <button class="btn btn-sm btn-outline-primary">
+              <button class="btn btn-sm btn-outline-primary" on-click="${e => this._toggleFavorite(article)}">
                 <i class="ion-heart"></i>
                 &nbsp;
                 Favorite Post
@@ -108,9 +108,9 @@ export class ArticleView extends connect(store)(LitElement) {
 
             <div class="col-xs-12 col-md-8 offset-md-2">
 
-              <form class="card comment-form">
+              <form class="card comment-form" on-submit="${e => this._submitForm(e)}">
                 <div class="card-block">
-                  <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                  <textarea id="comment" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
                 </div>
                 <div class="card-footer">
                   <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
@@ -164,6 +164,21 @@ export class ArticleView extends connect(store)(LitElement) {
 
   _deleteArticle(article) {
     store.dispatch(deleteArticle(article.slug, this.token));
+  }
+
+  _toggleFavorite(article) {
+    console.warn('TODO: implement favorite toggling');
+  }
+
+  _toggleFollowing(profile) {
+    console.warn('TODO: implement following toggling');
+  }
+
+  _submitForm(e) {
+    e.preventDefault();
+    const formElements = e.target.elements;
+    const comment = formElements.comment.value;
+    console.warn('TODO: implement comment posting', comment);
   }
 }
 

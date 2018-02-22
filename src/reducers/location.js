@@ -48,6 +48,15 @@ export const pageSelector = createSelector(
   }
 );
 
+export const tabSelector = createSelector(
+  splitPathnameSelector,
+  splitPath => {
+    const p = splitPath[0];
+    if (p && p[0] === '@') return splitPath[1] === 'favorites' ? 'favorited' : 'author';
+    return null;
+  }
+);
+
 const searchSelector = state => state.location.search;
 
 export const urlSearchParamsSelector = createSelector(

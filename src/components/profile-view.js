@@ -1,5 +1,6 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import articleList, { articlesSelector, currentPageSelector } from '../reducers/articleList.js';
+import { splitPathnameSelector, tabSelector } from '../reducers/location.js';
 import profile, { profileSelector, usernameSelector } from '../reducers/profile.js';
 import { store } from '../store.js';
 import { fetchProfile } from '../actions/profile.js';
@@ -13,7 +14,7 @@ store.addReducers({
 });
 
 export class ProfileView extends connect(store)(LitElement) {
-  render({ articles, profile }) {
+  render({ articles, profile, tab }) {
     return html`
     <style>${sharedStyles}</style>
     <div class="profile-page">
@@ -26,7 +27,7 @@ export class ProfileView extends connect(store)(LitElement) {
               <img src="${profile.image}" class="user-img" />
               <h4>${profile.username}</h4>
               <p>${profile.bio}</p>
-              <button class="btn btn-sm btn-outline-secondary action-btn">
+              <button class="btn btn-sm btn-outline-secondary action-btn" on-click="${e => this._toggleFollowing(profile)}">
                 <i class="ion-plus-round"></i>
                 &nbsp;
                 Follow ${profile.username}
@@ -44,10 +45,14 @@ export class ProfileView extends connect(store)(LitElement) {
             <div class="articles-toggle">
               <ul class="nav nav-pills outline-active">
                 <li class="nav-item">
-                  <a class="nav-link active" href="">My Articles</a>
+                  <a class$="nav-link ${tab === 'author' ? 'active' : ''}" href="/@${profile.username}">
+                    My Articles
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="">Favorited Articles</a>
+                  <a class$="nav-link ${tab === 'favorited' ? 'active' : ''}" href="/@${profile.username}/favorites">
+                    Favorited Articles
+                  </a>
                 </li>
               </ul>
             </div>
@@ -89,20 +94,27 @@ export class ProfileView extends connect(store)(LitElement) {
     return {
       articles: Array,
 
-      profile: Object
+      profile: Object,
+
+      tab: String
     }
   }
 
   stateChanged(state) {
     this.articles = articlesSelector(state);
     this.profile = profileSelector(state);
+    this.tab = tabSelector(state);
   }
 
   _toggleFavorite(article) {
-    // TODO: implement
+    console.warn('TODO: implement favorite toggling');
+  }
+
+  _toggleFollowing(profile) {
+    console.warn('TODO: implement following toggling');
   }
 }
 
 customElements.define('profile-view', ProfileView);
 
-export { usernameSelector, fetchProfile, fetchArticles, currentPageSelector };
+export { usernameSelector, fetchProfile, fetchArticles, currentPageSelector, tabSelector };

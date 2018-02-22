@@ -39,10 +39,15 @@ export const updateLocation = () => (dispatch, getState) => {
       import(/* webpackChunkName: 'profile' */ '../components/profile-view.js').then(module => {
         const state = getState();
         const username = module.usernameSelector(state);
-        const currentPage = module.currentPageSelector(state);
+        const currentPage = module.currentPageSelector(state) || 0;
+        const tab = module.tabSelector(state);
         const limit = 5;
-        dispatch(module.fetchProfile(username, tokenSelector(state)));
-        dispatch(module.fetchArticles({ author: username, limit, offset: limit * currentPage }, tokenSelector(state)));
+        const token = tokenSelector(state);
+        const options = { limit, offset: limit * currentPage };
+        // `tab` is one of 'author' or 'favorited', which is used as the name of a query param to fetchArticles.
+        options[tab] = username;
+        dispatch(module.fetchProfile(username, token));
+        dispatch(module.fetchArticles(options, token));
       });
       break;
     case 'settings':

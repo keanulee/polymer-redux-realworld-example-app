@@ -149,7 +149,7 @@ export class HomeView extends connect(store)(LitElement) {
     if (tab === 'all') {
       store.dispatch(fetchArticles(options, this.token));
     } else {
-      // TODO: implement personal feed
+      console.warn('TODO: implement personal feed');
       store.dispatch(setArticleList({
         articles: []
       }));
@@ -182,7 +182,7 @@ export class HomeView extends connect(store)(LitElement) {
   }
 
   _toggleFavorite(article) {
-    // TODO: implement
+    console.warn('TODO: implement favorite toggling');
   }
 }
 
