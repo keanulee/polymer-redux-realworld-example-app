@@ -1,5 +1,6 @@
 import {
   SET_USER,
+  REMOVE_USER,
   FAIL_USER
 } from '../actions/user.js';
 import { UPDATE_LOCATION } from '../actions/location.js';
@@ -15,6 +16,8 @@ const user = (state = {
         ...action.payload,
         errors: null
       };
+    case REMOVE_USER:
+      return {};
     case FAIL_USER:
       return {
         ...state,

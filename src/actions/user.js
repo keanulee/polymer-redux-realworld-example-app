@@ -2,6 +2,7 @@ import { api } from '../api.js';
 import { updateLocation } from './location.js';
 
 export const SET_USER = 'SET_USER';
+export const REMOVE_USER = 'REMOVE_USER';
 export const FAIL_USER = 'FAIL_USER';
 
 export const fetchUser = (token) => (dispatch) => {
@@ -30,6 +31,13 @@ export const loginUser = (user) => (dispatch) => {
     localStorage.setItem('jwt', data.user.token);
   })
   .catch(() => dispatch(failUser({network: 'unavailable'})));
+};
+
+export const logoutUser = () => (dispatch) => {
+  dispatch(removeUser());
+  window.history.pushState({}, '', '/');
+  dispatch(updateLocation());
+  localStorage.removeItem('jwt');
 };
 
 export const createUser = (user) => (dispatch) => {
@@ -76,6 +84,12 @@ const setUser = (user) => {
   return {
     type: SET_USER,
     payload: user
+  };
+};
+
+const removeUser = () => {
+  return {
+    type: REMOVE_USER
   };
 };
 

@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { store } from '../store.js';
-import { updateUser } from '../actions/user.js';
+import { updateUser, logoutUser } from '../actions/user.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { userSelector, tokenSelector } from '../reducers/user.js';
@@ -38,6 +38,12 @@ export class SettingsView extends connect(store)(LitElement) {
                   </button>
               </fieldset>
             </form>
+
+            <hr />
+
+            <button class="btn btn-outline-danger" on-click="${e => this._logoutUser()}">
+              Or click here to logout.
+            </button>
           </div>
 
         </div>
@@ -72,6 +78,10 @@ export class SettingsView extends connect(store)(LitElement) {
       user.password = password;
     }
     store.dispatch(updateUser(user, this.token));
+  }
+
+  _logoutUser() {
+    store.dispatch(logoutUser());
   }
 }
 
