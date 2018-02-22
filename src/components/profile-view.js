@@ -4,7 +4,7 @@ import profile, { profileSelector, usernameSelector } from '../reducers/profile.
 import { store } from '../store.js';
 import { fetchProfile } from '../actions/profile.js';
 import { fetchArticles } from '../actions/articleList.js';
-import { connect } from '../../lib/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 
 store.addReducers({
@@ -93,7 +93,7 @@ export class ProfileView extends connect(store)(LitElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
     this.articles = articlesSelector(state);
     this.profile = profileSelector(state);
   }

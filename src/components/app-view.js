@@ -5,8 +5,8 @@ import user, { tokenSelector, userSelector } from '../reducers/user.js';
 import { store } from '../store.js';
 import { updateLocation } from '../actions/location.js';
 import { fetchUser } from '../actions/user.js';
-import { connect } from '../../lib/connect-mixin.js';
-import { installRouter } from '../../lib/router.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
+import { installRouter } from '../../node_modules/pwa-helpers/router.js';
 import { sharedStyles } from './shared-styles.js';
 
 store.addReducers({
@@ -93,7 +93,7 @@ export class AppView extends connect(store)(LitElement) {
     };
   }
 
-  update(state) {
+  stateChanged(state) {
     this.page = pageSelector(state);
     this.user = userSelector(state);
   }

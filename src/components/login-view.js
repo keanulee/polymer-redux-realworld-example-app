@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { store } from '../store.js';
-import { connect } from '../../lib/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { loginUser } from '../actions/user.js';
 
@@ -41,7 +41,7 @@ export class LoginView extends connect(store)(LitElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
   }
 
   _submitForm(e) {

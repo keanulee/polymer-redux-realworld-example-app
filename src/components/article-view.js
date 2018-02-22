@@ -5,7 +5,7 @@ import { store } from '../store.js';
 // import './hn-summary.js';
 // import './hn-comment.js';
 import { fetchArticle, deleteArticle } from '../actions/article.js';
-import { connect } from '../../lib/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { tokenSelector, userSelector } from '../reducers/user.js';
 // HACK(keanulee): Using the minified build that defines a global - consider using
@@ -156,7 +156,7 @@ export class ArticleView extends connect(store)(LitElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
     this.article = articleSelector(state);
     this.user = userSelector(state);
     this.token = tokenSelector(state);

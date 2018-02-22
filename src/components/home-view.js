@@ -2,7 +2,7 @@ import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-el
 import articleList, { articlesSelector, articlesCountSelector, tagsSelector, currentPageSelector, tabSelector, tagSelector } from '../reducers/articleList.js';
 import { store } from '../store.js';
 import { fetchArticles, fetchTags, setArticleList } from '../actions/articleList.js';
-import { connect } from '../../lib/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { tokenSelector } from '../reducers/user.js';
 
@@ -123,7 +123,7 @@ export class HomeView extends connect(store)(LitElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
     const articlesCount = articlesCountSelector(state) || 0;
     const pageCount = Math.ceil(articlesCount / 10);
     const pages = [];

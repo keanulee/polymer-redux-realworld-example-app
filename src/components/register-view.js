@@ -1,6 +1,6 @@
 import { Element as PolymerElement } from '../../node_modules/@polymer/polymer/polymer-element.js';
 import { store } from '../store.js';
-import { connect } from '../../lib/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { createUser } from '../actions/user.js';
 
@@ -48,7 +48,7 @@ export class RegisterView extends connect(store)(PolymerElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
     this.setProperties({
     });
   }

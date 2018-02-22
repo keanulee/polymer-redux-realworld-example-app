@@ -4,7 +4,7 @@ import { store } from '../store.js';
 // import './hn-summary.js';
 // import './hn-comment.js';
 import { fetchArticle, createArticle, updateArticle } from '../actions/article.js';
-import { connect } from '../../lib/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { tokenSelector } from '../reducers/user.js';
 
@@ -51,7 +51,7 @@ export class EditorView extends connect(store)(PolymerElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
     this.setProperties({
       article: articleSelector(state)
     });
