@@ -1,12 +1,10 @@
 import { api } from '../api.js';
 import { updateLocation } from './location.js';
 
-// export const REQUEST_ARTICLE = 'REQUEST_ARTICLE';
 export const SET_ARTICLE = 'SET_ARTICLE';
-// export const FAIL_ARTICLE = 'FAIL_ARTICLE';
+export const SET_COMMENTS = 'SET_COMMENTS';
 
 export const fetchArticle = (slug, token) => (dispatch) => {
-  // dispatch(requestArticle(article));
   if (slug) {
     api(`/articles/${slug}`, token)
     .then(res => res.json())
@@ -14,7 +12,6 @@ export const fetchArticle = (slug, token) => (dispatch) => {
   } else {
     dispatch(setArticle({}));
   }
-  // .catch(() => dispatch(failArticle(article)));
 };
 
 export const createArticle = (article, token) => (dispatch) => {
@@ -53,18 +50,15 @@ export const deleteArticle = (slug, token) => (dispatch) => {
   })
 }
 
-// export const fetchListIfNeeded = (list) => (dispatch) => {
-//   if (list && !list.items && !list.isFetching) {
-//     dispatch(fetchList(list));
-//   }
-// };
-
-// const requestArticle = (listId) => {
-//   return {
-//     type: REQUEST_ARTICLE,
-//     listId
-//   };
-// };
+export const fetchComments = (slug, token) => (dispatch) => {
+  if (slug) {
+    api(`/articles/${slug}/comments`, token)
+    .then(res => res.json())
+    .then(data => dispatch(setComments(data.comments)))
+  } else {
+    dispatch(setComments([]));
+  }
+};
 
 const setArticle = (article) => {
   return {
@@ -73,9 +67,9 @@ const setArticle = (article) => {
   };
 };
 
-// const failArticle = (listId) => {
-//   return {
-//     type: FAIL_ARTICLE,
-//     listId
-//   };
-// };
+const setComments = (comments) => {
+  return {
+    type: SET_COMMENTS,
+    payload: comments
+  };
+};

@@ -1,21 +1,22 @@
 import {
-  // REQUEST_ARTICLE,
   SET_ARTICLE,
-  // FAIL_ARTICLE
+  SET_COMMENTS
 } from '../actions/article.js';
 import { createSelector } from '../../node_modules/reselect/src/index.js';
 import { splitPathnameSelector } from './location.js';
-// import { itemsSelector } from './items.js';
-// import { favoritesSelector } from './favorites.js';
 
 const article = (state = {}, action) => {
   switch (action.type) {
-    // case REQUEST_ARTICLE:
-    //   return state;
     case SET_ARTICLE:
-      return action.payload;
-    // case FAIL_ARTICLE:
-    //   return state;
+      return {
+        ...state,
+        article: action.payload
+      };
+    case SET_COMMENTS:
+      return {
+        ...state,
+        comments: action.payload
+      };
     default:
       return state;
   }
@@ -23,7 +24,9 @@ const article = (state = {}, action) => {
 
 export default article;
 
-export const articleSelector = state => state.article;
+export const articleSelector = state => state.article.article;
+
+export const commentsSelector = state => state.article.comments;
 
 export const slugSelector = createSelector(
   splitPathnameSelector,

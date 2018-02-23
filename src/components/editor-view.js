@@ -13,7 +13,7 @@ store.addReducers({
 });
 
 export class EditorView extends connect(store)(LitElement) {
-  render({ article }) {
+  render({ article = {} }) {
     return html`
     <style>${sharedStyles}</style>
     <div class="editor-page">

@@ -1,8 +1,8 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { unsafeHTML } from '../../node_modules/lit-html/lib/unsafe-html.js';
-import article, { articleSelector, slugSelector } from '../reducers/article.js';
+import article, { articleSelector, slugSelector, commentsSelector } from '../reducers/article.js';
 import { store } from '../store.js';
-import { fetchArticle, deleteArticle } from '../actions/article.js';
+import { fetchArticle, fetchComments, deleteArticle } from '../actions/article.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
 import { tokenSelector, userSelector } from '../reducers/user.js';
@@ -17,7 +17,7 @@ store.addReducers({
 });
 
 export class ArticleView extends connect(store)(LitElement) {
-  render({ article, user }) {
+  render({ article = {}, comments, user }) {
     return html`
     <style>${sharedStyles}</style>
 
@@ -120,7 +120,7 @@ export class ArticleView extends connect(store)(LitElement) {
                 </div>
               </form>
               
-              ${/* TODO: fetch and post comments */article.comments && article.comments.map(comment => html`
+              ${comments && comments.map(comment => html`
                 <div class="card">
                   <div class="card-block">
                     <p class="card-text">${comment.body}</p>
@@ -132,6 +132,11 @@ export class ArticleView extends connect(store)(LitElement) {
                     &nbsp;
                     <a href class="comment-author">${comment.author.username}</a>
                     <span class="date-posted">${new Date(comment.createdAt).toDateString()}</span>
+                    ${user && comment.author.username === user.username ? html`
+                      <span class="mod-options">
+                        <i class="ion-trash-a" on-click="${e => this._deleteComment(comment)}"></i>
+                      </span>
+                    ` : null}
                   </div>
                 </div>
               `)}
@@ -150,6 +155,8 @@ export class ArticleView extends connect(store)(LitElement) {
     return {
       article: Object,
 
+      comments: Array,
+
       token: String,
 
       user: Object
@@ -158,6 +165,7 @@ export class ArticleView extends connect(store)(LitElement) {
 
   stateChanged(state) {
     this.article = articleSelector(state);
+    this.comments = commentsSelector(state);
     this.user = userSelector(state);
     this.token = tokenSelector(state);
   }
@@ -174,6 +182,10 @@ export class ArticleView extends connect(store)(LitElement) {
     console.warn('TODO: implement following toggling');
   }
 
+  _deleteComment(comment) {
+    console.warn('TODO: implement comment deleting');
+  }
+
   _submitForm(e) {
     e.preventDefault();
     const formElements = e.target.elements;
@@ -184,4 +196,4 @@ export class ArticleView extends connect(store)(LitElement) {
 
 customElements.define('article-view', ArticleView);
 
-export { slugSelector, fetchArticle };
+export { slugSelector, fetchArticle, fetchComments };

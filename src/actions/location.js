@@ -64,7 +64,10 @@ export const updateLocation = () => (dispatch, getState) => {
     case 'article':
       import(/* webpackChunkName: 'article' */ '../components/article-view.js').then(module => {
         const state = getState();
-        dispatch(module.fetchArticle(module.slugSelector(state), tokenSelector(state)));
+        const slug = module.slugSelector(state);
+        const token = tokenSelector(state);
+        dispatch(module.fetchArticle(slug, token));
+        dispatch(module.fetchComments(slug, token));
       });
       break;
   }
