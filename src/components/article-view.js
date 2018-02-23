@@ -9,7 +9,7 @@ import { tokenSelector, userSelector } from '../reducers/user.js';
 
 // HACK(keanulee): There's no web-compatible module version of marked, so use the min.js
 // version that defines a global for development, and use the require() syntax for webpack.
-import '../../node_modules/marked/marked.min.js';
+// import '../../node_modules/marked/marked.min.js';
 const marked = window.marked || require('marked');
 
 store.addReducers({

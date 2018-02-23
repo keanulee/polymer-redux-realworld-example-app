@@ -3,7 +3,11 @@
   "flat": true,
   "version": "1.0.0",
   "contributors": [],
-  "scripts": {},
+  "scripts": {
+    "clean": "rm -rf dist",
+    "webpack": "webpack --config webpack.config.js",
+    "build": "npm run clean && npm run webpack"
+  },
   "dependencies": {
     "@0xcda7a/redux-es6": "^3.7.2",
     "@polymer/lit-element": "^0.1.0",
@@ -14,12 +18,10 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
     "webpack": "^3.10.0"
   }
 }

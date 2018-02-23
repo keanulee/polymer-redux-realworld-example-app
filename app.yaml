@@ -1,0 +1,72 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+
+- url: /src
+  static_dir: dist/src
+  secure: always
+
+- url: /static
+  static_dir: static
+  secure: always
+
+- url: /(.*)
+  static_files: index.html
+  upload: index.html
+  secure: always
+
+# TODO: Optimize preload headers for each route.
+
+# - url: /
+#   static_files: dist/index.html
+#   upload: dist/index.html
+#   secure: always
+#   http_headers:
+#     Link: 
+#       </main.js>;rel=preload;as=script,
+#       </list-item-main.js>;rel=preload;as=script,
+#       </list.js>;rel=preload;as=script,
+#       </api/news>;rel=preload;as=fetch
+
+# - url: /(new|ask|show|jobs|favorites)
+#   static_files: dist/index.html
+#   upload: dist/index.html
+#   secure: always
+#   http_headers:
+#     Link: 
+#       </main.js>;rel=preload;as=script,
+#       </list-item-main.js>;rel=preload;as=script,
+#       </list.js>;rel=preload;as=script
+
+# - url: /item
+#   static_files: dist/index.html
+#   upload: dist/index.html
+#   secure: always
+#   http_headers:
+#     Link: 
+#       </main.js>;rel=preload;as=script,
+#       </list-item-main.js>;rel=preload;as=script,
+#       </item-user-main.js>;rel=preload;as=script,
+#       </item.js>;rel=preload;as=script
+
+# - url: /user
+#   static_files: dist/index.html
+#   upload: dist/index.html
+#   secure: always
+#   http_headers:
+#     Link: 
+#       </main.js>;rel=preload;as=script,
+#       </item-user-main.js>;rel=preload;as=script,
+#       </user.js>;rel=preload;as=script
+
+# TODO: Proxy API requests so they can be server pushed.
+
+# - url: /api/(.*)
+#   script: server.app
+#   secure: always
+
+skip_files:
+- node_modules/
+- src/
