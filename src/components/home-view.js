@@ -4,14 +4,14 @@ import { store } from '../store.js';
 import { fetchArticles, fetchTags, setArticleList } from '../actions/articleList.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { sharedStyles } from './shared-styles.js';
-import { tokenSelector } from '../reducers/user.js';
+import { tokenSelector, userSelector } from '../reducers/user.js';
 
 store.addReducers({
   articleList
 });
 
 export class HomeView extends connect(store)(LitElement) {
-  render({ articles, pages, currentPage, tab, tag, tags }) {
+  render({ articles, pages, currentPage, tab, tag, tags, user }) {
     return html`
     <style>${sharedStyles}</style>
     <div class="home-page">
@@ -29,25 +29,27 @@ export class HomeView extends connect(store)(LitElement) {
           <div class="col-md-9">
             <div class="feed-toggle">
               <ul class="nav nav-pills outline-active">
-                <li class="nav-item">
-                  <a class$="nav-link ${tab === 'feed' ? 'active' : ''}" href on-click="${e => this._setTab('feed')}">
-                    Your Feed
-                  </a>
-                </li>
+                ${user && user.username ? html`
+                  <li class="nav-item">
+                    <a class$="nav-link ${tab === 'feed' ? 'active' : ''}" href on-click="${e => this._setTab('feed')}">
+                      Your Feed
+                    </a>
+                  </li>
+                ` : null}
                 <li class="nav-item">
                   <a class$="nav-link ${tab === 'all' ? 'active' : ''}" href on-click="${e => this._setTab('all')}">
                     Global Feed
                   </a>
                 </li>
-                ${tag && html`
+                ${tag ? html`
                   <li class="nav-item">
                     <a class="nav-link active" href>${tag}</a>
                   </li>
-                `}
+                ` : null}
               </ul>
             </div>
 
-            ${articles && articles.map(article => html`
+            ${articles ? articles.map(article => html`
               <div class="article-preview">
                 <div class="article-meta">
                   <a href="/@${article.author.username}">
@@ -70,7 +72,7 @@ export class HomeView extends connect(store)(LitElement) {
                   <span>Read more...</span>
                 </a>
               </div>
-            `)}
+            `) : null}
 
             <nav>
               <ul class="pagination">
@@ -119,7 +121,9 @@ export class HomeView extends connect(store)(LitElement) {
 
       tags: Array,
 
-      token: String
+      token: String,
+
+      user: Object
     }
   }
 
@@ -137,6 +141,7 @@ export class HomeView extends connect(store)(LitElement) {
     this.tag = tagSelector(state);
     this.tags = tagsSelector(state);
     this.token = tokenSelector(state);
+    this.user = userSelector(state);
   }
 
   _setTab(tab) {

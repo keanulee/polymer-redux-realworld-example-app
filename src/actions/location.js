@@ -15,7 +15,8 @@ export const updateLocation = () => (dispatch, getState) => {
     case 'home':
       import(/* webpackChunkName: 'home' */ '../components/home-view.js').then(module => {
         dispatch(module.setArticleList({
-          tab: 'all'
+          tab: 'all',
+          tag: null
         }));
         const state = getState();
         const limit = 10;

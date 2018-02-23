@@ -39,17 +39,19 @@ export class ArticleView extends connect(store)(LitElement) {
                 </a>
                 <span class="date">${new Date(article.createdAt).toDateString()}</span>
               </div>
-              <button class="btn btn-sm btn-outline-secondary" on-click="${e => this._toggleFollowing(article.author)}">
-                <i class="ion-plus-round"></i>
-                &nbsp;
-                Follow ${article.author.username}
-              </button>
-              <button class="btn btn-sm btn-outline-primary" on-click="${e => this._toggleFavorite(article)}">
-                <i class="ion-heart"></i>
-                &nbsp;
-                Favorite Post
-                <span class="counter">(${article.favoritesCount})</span>
-              </button>
+              ${user && user.username ? html`
+                <button class="btn btn-sm btn-outline-secondary" on-click="${e => this._toggleFollowing(article.author)}">
+                  <i class="ion-plus-round"></i>
+                  &nbsp;
+                  Follow ${article.author.username}
+                </button>
+                <button class="btn btn-sm btn-outline-primary" on-click="${e => this._toggleFavorite(article)}">
+                  <i class="ion-heart"></i>
+                  &nbsp;
+                  Favorite Post
+                  <span class="counter">(${article.favoritesCount})</span>
+                </button>
+              ` : null}
               ${user && article.author.username === user.username ? html`
                 <a href="/editor/${article.slug}" class="btn btn-sm btn-outline-secondary">
                   <i class="ion-edit"></i>
@@ -89,36 +91,52 @@ export class ArticleView extends connect(store)(LitElement) {
                 <span class="date">${new Date(article.createdAt).toDateString()}</span>
               </div>
 
-              <button class="btn btn-sm btn-outline-secondary" on-click="${e => this._toggleFollowing(article.author)}">
-                <i class="ion-plus-round"></i>
+              ${user && user.username ? html`
+                <button class="btn btn-sm btn-outline-secondary" on-click="${e => this._toggleFollowing(article.author)}">
+                  <i class="ion-plus-round"></i>
+                  &nbsp;
+                  Follow ${article.author.username}
+                </button>
                 &nbsp;
-                Follow ${article.author.username}
-              </button>
-              &nbsp;
-              <button class="btn btn-sm btn-outline-primary" on-click="${e => this._toggleFavorite(article)}">
-                <i class="ion-heart"></i>
-                &nbsp;
-                Favorite Post
-                <span class="counter">(${article.favoritesCount})</span>
-              </button>
+                <button class="btn btn-sm btn-outline-primary" on-click="${e => this._toggleFavorite(article)}">
+                  <i class="ion-heart"></i>
+                  &nbsp;
+                  Favorite Post
+                  <span class="counter">(${article.favoritesCount})</span>
+                </button>
+              ` : null}
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-xs-12 col-md-8 offset-md-2">
+              
+              <div></div></div></div>
 
           <div class="row">
 
             <div class="col-xs-12 col-md-8 offset-md-2">
 
-              <form class="card comment-form" on-submit="${e => this._submitForm(e)}">
-                <div class="card-block">
-                  <textarea id="comment" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
-                </div>
-                <div class="card-footer">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                  <button class="btn btn-sm btn-primary">
-                  Post Comment
-                  </button>
-                </div>
-              </form>
+              ${user && user.username ? html`
+                <form class="card comment-form" on-submit="${e => this._submitForm(e)}">
+                  <div class="card-block">
+                    <textarea id="comment" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                  </div>
+                  <div class="card-footer">
+                    <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+                    <button class="btn btn-sm btn-primary">
+                    Post Comment
+                    </button>
+                  </div>
+                </form>
+              ` : html`
+                <p>
+                  <a href="/login">Sign in</a>
+                  or
+                  <a href="/register">sign up</a>
+                  to add comments on this article.
+                </p>
+              `}
               
               ${comments && comments.map(comment => html`
                 <div class="card">
