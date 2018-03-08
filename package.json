@@ -3,7 +3,12 @@
   "flat": true,
   "version": "1.0.0",
   "contributors": [],
-  "scripts": {},
+  "scripts": {
+    "bundle": "node ../../Polymer/polymer-bundler/lib/bin/polymer-bundler.js --out-dir bundled --shell src/components/app-view.js src/components/app-view.js",
+    "minify": "babel bundled --out-dir dist",
+    "clean": "rm -rf bundled dist",
+    "build": "npm run clean && npm run bundle && npm run minify"
+  },
   "dependencies": {
     "@0xcda7a/redux-es6": "^3.7.2",
     "@polymer/lit-element": "^0.2.2",
@@ -14,6 +19,7 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",

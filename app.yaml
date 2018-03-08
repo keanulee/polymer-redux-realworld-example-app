@@ -1,0 +1,23 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+
+- url: /src
+  static_dir: dist/src
+  secure: always
+
+- url: /static
+  static_dir: static
+  secure: always
+
+- url: /(.*)
+  static_files: index.html
+  upload: index.html
+  secure: always
+
+skip_files:
+- bundled/
+- node_modules/
+- src/
