@@ -6,7 +6,7 @@
   "scripts": {},
   "dependencies": {
     "@0xcda7a/redux-es6": "^3.7.2",
-    "@polymer/lit-element": "^0.1.0",
+    "@polymer/lit-element": "^0.2.2",
     "@polymer/polymer": "^3.0.0-pre.7",
     "marked": "^0.3.12",
     "pwa-helpers": "polymerlabs/pwa-helpers",
